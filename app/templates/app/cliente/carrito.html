@@ -1,0 +1,117 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    font-size: 1.5rem; /* Más grande para lectura cómoda */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  h2 {
+    font-size: 2.8rem; /* Título*/
+    font-weight: 700;
+  }
+
+  .table th,
+  .table td {
+    font-size: 1.5rem; /* Texto de tabla grande */
+    vertical-align: middle;
+  }
+
+  .table thead th {
+    background-color: #2c3e50;
+    color: white;
+    font-weight: 700;
+  }
+
+  .btn {
+    font-size: 1.2rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+  }
+
+  .btn-sm {
+    font-size: 1.5rem;
+  }
+
+  .product-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+  }
+
+  .fw-semibold {
+    font-weight: 600;
+  }
+
+  /* Espaciados */
+  .table-responsive {
+    margin-bottom: 2rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    h4 {
+      text-align: center;
+      font-size: 1.5rem;
+    }
+    .d-flex.justify-content-between {
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<div class="container py-5">
+  <h2 class="text-center mb-5">🛒 Tu Carrito de Compras</h2>
+
+  <!-- Mensaje carrito vacío (activar con lógica) -->
+  <!-- <div class="alert alert-info text-center" style="font-size:1.3rem;">Tu carrito está vacío.</div> -->
+
+  <div class="table-responsive">
+    <table class="table align-middle table-bordered table-hover">
+      <thead class="text-center">
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          <th>Subtotal</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        <!-- Producto ejemplo -->
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <img src="{% static 'app/img/producto1.jpg' %}" alt="Producto" class="rounded me-3 product-img">
+              <span class="fw-semibold">Taladro Eléctrico XYZ</span>
+            </div>
+          </td>
+          <td>2</td>
+          <td>$100.000</td>
+          <td>$200.000</td>
+          <td>
+            <button class="btn btn-danger btn-sm">Eliminar</button>
+          </td>
+        </tr>
+        <!-- Más productos -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Total y botones -->
+  <div class="d-flex justify-content-between align-items-center mt-4 flex-column flex-md-row">
+    <h4 style="font-weight: 700;">Total a pagar: <strong class="text-success">$200.000</strong></h4>
+    <div class="d-flex gap-3 flex-column flex-sm-row">
+      <a href="#" class="btn btn-outline-secondary">← Seguir Comprando</a>
+      <a href="#" class="btn btn-success">Finalizar Compra</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

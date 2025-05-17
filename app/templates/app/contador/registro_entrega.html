@@ -1,0 +1,136 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  body {
+    font-size: 1.5rem;
+  }
+
+  .card {
+    border: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border-radius: 1.5rem;
+  }
+
+  h2 {
+    font-size: 2.8rem;
+  }
+
+  .table thead th {
+    background-color: #343a40;
+    color: white;
+    font-size: 1.5rem;
+  }
+
+  .table-bordered td,
+  .table-bordered th {
+    border: 1px solid #dee2e6;
+    vertical-align: middle;
+  }
+
+  .table td {
+    font-size: 1.5rem;
+  }
+
+  .badge {
+    font-size: 1.5rem;
+    padding: 1em 1em;
+    border-radius: 2rem;
+    font-weight: 600;
+  }
+
+  .badge-entregado {
+    background-color: #198754;
+    color: #fff;
+  }
+
+  .badge-pendiente {
+    background-color: #ffc107;
+    color: #212529;
+  }
+
+  .badge-devuelto {
+    background-color: #dc3545;
+    color: #fff;
+  }
+
+  .filter-bar {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-bar select,
+  .filter-bar input[type="date"] {
+    min-width: 160px;
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .filter-bar {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <h2 class="fw-bold mb-0">Registro de Entregas</h2>
+    <div class="filter-bar">
+      <select class="form-select" name="estado_entrega">
+        <option value="">Todos los estados</option>
+        <option value="entregado">Entregado</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="devuelto">Devuelto</option>
+      </select>
+      <input type="date" class="form-control" name="fecha_inicio">
+      <input type="date" class="form-control" name="fecha_fin">
+    </div>
+  </div>
+
+  <div class="card p-4">
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle text-center">
+        <thead>
+          <tr>
+            <th>ID Entrega</th>
+            <th>Pedido</th>
+            <th>Cliente</th>
+            <th>Fecha Entrega</th>
+            <th>Encargado</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>#7001</td>
+            <td>#1023</td>
+            <td>Carla Reyes</td>
+            <td>13/05/2025</td>
+            <td>Juan Soto</td>
+            <td><span class="badge badge-entregado">Entregado</span></td>
+          </tr>
+          <tr>
+            <td>#7002</td>
+            <td>#1024</td>
+            <td>Eduardo Díaz</td>
+            <td>14/05/2025</td>
+            <td>María Pinto</td>
+            <td><span class="badge badge-pendiente">Pendiente</span></td>
+          </tr>
+          <tr>
+            <td>#7003</td>
+            <td>#1025</td>
+            <td>Camila Torres</td>
+            <td>14/05/2025</td>
+            <td>Carlos Muñoz</td>
+            <td><span class="badge badge-devuelto">Devuelto</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

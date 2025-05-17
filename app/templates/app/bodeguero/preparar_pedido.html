@@ -1,0 +1,113 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .pedido-card {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .pedido-card h3 {
+    font-weight: 800;
+    font-size: 2rem;
+    color: #0d6efd;
+    margin-bottom: 25px;
+  }
+
+  .pedido-info p {
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+    color: #333;
+  }
+
+  .producto-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+  }
+
+  .producto-list li {
+    padding: 15px 10px;
+    border-bottom: 1px solid #ccc;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #212529;
+  }
+
+  .producto-list li:last-child {
+    border-bottom: none;
+  }
+
+  .badge-estado {
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1rem;
+    background-color: #ffc107;
+    color: #212529;
+  }
+
+  .btn-accion {
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 15px 15px 0 0;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .btn-preparado {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+  }
+
+  .btn-preparado:hover {
+    background-color: #0b5ed7;
+    transform: scale(1.03);
+  }
+
+  .btn-entregado {
+    background-color: #198754;
+    color: white;
+    border: none;
+  }
+
+  .btn-entregado:hover {
+    background-color: #157347;
+    transform: scale(1.03);
+  }
+</style>
+
+<div class="container mt-5 mb-5">
+  <div class="pedido-card">
+    <h3>Preparar Pedido - Orden #ORD-1002</h3>
+
+    <div class="pedido-info">
+      <p><strong>Cliente:</strong> Ferretería Central</p>
+      <p><strong>Fecha del pedido:</strong> 14-05-2025</p>
+      <p><strong>Estado:</strong> <span class="badge-estado">En preparación</span></p>
+    </div>
+
+    <h5 class="mt-4" style="font-size: 1.4rem; font-weight: 700;">Productos a preparar:</h5>
+    <ul class="producto-list">
+      <li>🔧 1x Sierra Circular - Código: SI123</li>
+      <li>🔩 4x Juego de Brocas - Código: BR456</li>
+      <li>🧰 2x Caja de Herramientas - Código: CA789</li>
+    </ul>
+
+    <div class="mt-4">
+      <button class="btn-accion btn-preparado">Marcar como Preparado</button>
+      <button class="btn-accion btn-entregado">Entregar al Vendedor</button>
+    </div>
+  </div>
+</div>
+{% endblock %}

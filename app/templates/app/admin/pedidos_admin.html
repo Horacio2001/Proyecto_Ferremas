@@ -1,0 +1,123 @@
+{% extends 'app/base.html' %}
+{% block content %}
+<style>
+  h2 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #0d6efd;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .card {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
+  }
+
+  table {
+    font-size: 1.4rem;
+  }
+
+  th {
+    font-size: 1.4rem;
+    background-color: #212529 !important;
+    color: white !important;
+    text-align: center;
+  }
+
+  td {
+    font-size: 1.4rem;
+    vertical-align: middle !important;
+  }
+
+  .badge {
+    font-size: 1.4rem;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+
+  .badge-aprobado {
+    background-color: #198754; /* verde bootstrap */
+    color: white;
+  }
+
+  .badge-pendiente {
+    background-color: #ffc107; /* amarillo bootstrap */
+    color: black;
+  }
+
+  .badge-rechazado {
+    background-color: #dc3545; /* rojo bootstrap */
+    color: white;
+  }
+
+  .btn-sm {
+    font-size: 1.4rem;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  .btn-outline-primary {
+    color: #0d6efd;
+    border-color: #0d6efd;
+  }
+  .btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: white;
+  }
+
+  .btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+  }
+  .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+  }
+
+  .table-bordered td,
+  .table-bordered th {
+    border: 1.5px solid #dee2e6;
+  }
+</style>
+
+<div class="container my-5">
+  <h2>📦 Gestión de Pedidos</h2>
+
+  <div class="card">
+    <div class="card-body p-4">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle text-center mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Fecha</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#1001</td>
+              <td>Carlos Ruiz</td>
+              <td>15/05/2025</td>
+              <td><strong>$50.000</strong></td>
+              <td><span class="badge badge-aprobado">Aprobado</span></td>
+              <td>
+                <a href="#" class="btn btn-sm btn-outline-primary me-2">🔍 Ver</a>
+                <a href="#" class="btn btn-sm btn-outline-secondary">✏️ Editar</a>
+              </td>
+            </tr>
+            <!-- Más pedidos -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

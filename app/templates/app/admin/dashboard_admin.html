@@ -1,0 +1,162 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+<!-- Estilos personalizados -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  body {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #212529;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-custom {
+    border: none;
+    border-radius: 1rem;
+    transition: transform 0.2s ease;
+  }
+
+  .card-custom:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  }
+
+  .card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  .card-text {
+    font-size: 1.25rem;
+  }
+
+  canvas {
+    background: white;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  }
+</style>
+
+<div class="container my-5">
+  <h2 class="dashboard-title mb-4">📊 Panel de Administración</h2>
+
+  <!-- Métricas principales -->
+  <div class="row g-4">
+    <div class="col-md-3">
+      <div class="card bg-primary text-white card-custom">
+        <div class="card-body">
+          <h5 class="card-title">👥 Usuarios</h5>
+          <p class="card-text">{{ total_usuarios }} registrados</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card bg-success text-white card-custom">
+        <div class="card-body">
+          <h5 class="card-title">📦 Pedidos</h5>
+          <p class="card-text">{{ total_pedidos }} totales</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card bg-warning text-dark card-custom">
+        <div class="card-body">
+          <h5 class="card-title">📦 Inventario</h5>
+          <p class="card-text">{{ total_productos }} productos</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card bg-danger text-white card-custom">
+        <div class="card-body">
+          <h5 class="card-title">⚠️ Alertas</h5>
+          <p class="card-text">{{ productos_bajos }} productos bajos</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráfico de pedidos mensuales -->
+  <h3 class="section-title">📈 Pedidos Mensuales</h3>
+  <div class="row mb-5">
+    <div class="col-md-12">
+      <canvas id="pedidosChart" height="100"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Canvas para gráfico -->
+<canvas id="pedidosChart" width="400" height="200"></canvas>
+
+<script>
+  // Datos estáticos para probar frontend
+  const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'];
+  const pedidosPorMes = [12, 19, 3, 5, 2, 3];
+
+  const ctx = document.getElementById('pedidosChart').getContext('2d');
+
+  const pedidosChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: meses,
+      datasets: [{
+        label: 'Pedidos por mes',
+        data: pedidosPorMes,
+        backgroundColor: '#0d6efd',
+        borderRadius: 8,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            font: {
+              size: 14
+            }
+          }
+        },
+        x: {
+          ticks: {
+            font: {
+              size: 14
+            }
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              size: 16
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
+
+
+{% endblock %}

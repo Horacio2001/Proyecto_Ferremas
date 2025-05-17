@@ -1,0 +1,206 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+<style>
+  h2 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #0d6efd;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .card, .table-responsive {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
+  }
+
+  table {
+    font-size: 1.4rem;
+  }
+
+  th {
+    font-size: 1.4rem;
+    background-color: #212529 !important;
+    color: white !important;
+    text-align: center;
+  }
+
+  td {
+    font-size: 1.4rem;
+    vertical-align: middle !important;
+  }
+
+  .badge {
+    font-size: 1.4rem;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+
+  .btn-sm {
+    font-size: 1.4rem;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  .btn-outline-info:hover {
+    background-color: #0dcaf0;
+    color: #fff;
+  }
+
+  .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+  }
+
+  .btn-success {
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border-radius: 10px;
+  }
+
+  .modal-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  .form-label {
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  .form-control, .form-select {
+    font-size: 1.2rem;
+    border-radius: 8px;
+  }
+
+  .modal-footer .btn {
+    font-size: 1.2rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
+
+  .table-bordered td,
+  .table-bordered th {
+    border: 1.5px solid #dee2e6;
+  }
+</style>
+
+
+<div class="container my-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-primary">👥 Gestión de Usuarios</h2>
+    <!-- Botón que abre el modal -->
+    <button class="btn btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAgregarUsuario">
+      ➕ Agregar Usuario
+    </button>
+  </div>
+
+  <!-- Filtros deshabilitados por ahora -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <input type="text" class="form-control" placeholder="🔍 Buscar por nombre o correo..." disabled>
+    </div>
+    <div class="col-md-3">
+      <select class="form-select" disabled>
+        <option selected>Filtrar por rol</option>
+        <option>Administrador</option>
+        <option>Vendedor</option>
+        <option>Cliente</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Tabla de usuarios -->
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-bordered table-hover text-center align-middle">
+      <thead class="table-primary">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Ana Torres</td>
+          <td>ana@example.com</td>
+          <td>Administrador</td>
+          <td><span class="badge bg-success">Activo</span></td>
+          <td>
+            <a href="#" class="btn btn-sm btn-outline-info me-1">✏️ Editar</a>
+            <a href="#" class="btn btn-sm btn-outline-danger">🗑️ Eliminar</a>
+          </td>
+        </tr>
+        <!-- Más registros -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 🌟 MODAL AGREGAR USUARIO -->
+<div class="modal fade" id="modalAgregarUsuario" tabindex="-1" aria-labelledby="modalAgregarUsuarioLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold" id="modalAgregarUsuarioLabel">➕ Agregar Nuevo Usuario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body">
+        <form>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="nombreUsuario" class="form-label">Nombre completo</label>
+              <input type="text" class="form-control" id="nombreUsuario" placeholder="Ej: Juan Pérez" required>
+            </div>
+            <div class="col-md-6">
+              <label for="correoUsuario" class="form-label">Correo electrónico</label>
+              <input type="email" class="form-control" id="correoUsuario" placeholder="Ej: juan@example.com" required>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="rolUsuario" class="form-label">Rol</label>
+              <select class="form-select" id="rolUsuario" required>
+                <option selected disabled>Seleccione un rol</option>
+                <option>Administrador</option>
+                <option>Vendedor</option>
+                <option>Cliente</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="estadoUsuario" class="form-label">Estado</label>
+              <select class="form-select" id="estadoUsuario" required>
+                <option>Activo</option>
+                <option>Inactivo</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="contrasenaUsuario" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="contrasenaUsuario" placeholder="••••••••" required>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary">Guardar Usuario</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

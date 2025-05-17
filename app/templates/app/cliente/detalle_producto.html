@@ -1,0 +1,105 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+
+.product-image {
+  max-width: 100%;
+  width: 300px; /* Ajusta esto según lo que necesites */
+  height: auto; /* Para mantener la proporción */
+}
+
+
+.product-detail {
+  font-size: 1.4rem;
+  line-height: 1.5;
+}
+
+.product-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.product-info ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.service-box {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  transition: box-shadow 0.3s;
+  background-color: #f9f9f9;
+  height: 100%;
+}
+
+.service-box:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.service-box img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.btn-lg {
+  padding: 12px 24px;
+  font-size: 1.5rem;
+}
+</style>
+
+<div class="container py-5 product-detail">
+  <div class="row mb-5">
+    <!-- Imagen del producto -->
+    <div class="col-md-6">
+      <img src="{% static 'app/img/sierra_circular.png' %}" alt="Sierra Circular Makita 5007NK" class="product-image img-fluid rounded shadow">
+
+    </div>
+
+    <!-- Detalles del producto -->
+    <div class="col-md-6 product-info">
+      <h2 class="product-title mb-3">Sierra Circular Makita 5007NK 7 1/4" 1800W</h2>
+      <p class="mb-3">Potente sierra circular ideal para cortes precisos en madera y otros materiales.</p>
+      <ul class="mb-4">
+        <li><strong>Potencia:</strong> 1800W</li>
+        <li><strong>Velocidad sin carga:</strong> 5800 RPM</li>
+        <li><strong>Diámetro del disco:</strong> 185mm (7 1/4")</li>
+        <li><strong>Corte a 90°:</strong> 63.5mm</li>
+        <li><strong>Peso:</strong> 5.2kg</li>
+      </ul>
+      <button class="btn btn-success btn-lg">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <!-- Servicios: despacho, retiro, garantía -->
+  <div class="row text-center">
+    <div class="col-md-4 mb-4">
+      <div class="service-box">
+        <img src="{% static 'app/img/delivery.png' %}" alt="Despacho">
+        <h5>Despacho a domicilio</h5>
+        <p>Recibe tu producto donde quieras dentro de 48 horas.</p>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="service-box">
+        <img src="{% static 'app/img/store.png' %}" alt="Retiro en tienda">
+        <h5>Retiro en tienda</h5>
+        <p>Compra online y retira en nuestra sucursal más cercana.</p>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="service-box">
+        <img src="{% static 'app/img/guarantee.png' %}" alt="Garantía">
+        <h5>Garantía asegurada</h5>
+        <p>Todos nuestros productos cuentan con garantía oficial.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

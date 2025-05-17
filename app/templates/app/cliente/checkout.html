@@ -1,0 +1,149 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .checkout-section {
+    background-color: #f8f9fa;
+  }
+
+  .form-box, .summary-box {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
+    font-size: 1.4rem; /* Tamaño base legible */
+    line-height: 1.5;
+  }
+
+  .form-label {
+    font-size: 1.5rem;
+  }
+
+  input.form-control, select.form-select {
+    font-size: 1.4rem;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
+  }
+  input.form-control:focus, select.form-select:focus {
+    border-color: #28a745;
+    outline: none;
+    box-shadow: 0 0 6px rgba(40,167,69,0.5);
+  }
+
+  .summary-box .item {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 0;
+    font-size: 1.4rem;
+  }
+
+  .summary-box .item:last-child {
+    border-bottom: none;
+  }
+
+  .summary-total {
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  .checkout-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.5rem;
+    background: #28a745;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-weight: 600;
+  }
+
+  .checkout-btn:hover {
+    background: #218838;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 576px) {
+    .form-box, .summary-box {
+      padding: 20px;
+      font-size: 1.3rem;
+    }
+    .form-label {
+      font-size: 1.3rem;
+    }
+    .checkout-btn {
+      font-size: 1.3rem;
+      padding: 12px;
+    }
+  }
+</style>
+
+<div class="container checkout-section py-5">
+  <h2 class="text-center mb-5" style="font-size: 2rem;">🧾 Finalizar Compra</h2>
+
+  <div class="row g-4">
+    <!-- Formulario de envío y pago -->
+    <div class="col-md-7">
+      <div class="form-box">
+        <form method="post">
+          {% csrf_token %}
+
+          <!-- Dirección -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold" for="direccion">📍 Dirección de Envío</label>
+            <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ej. Av. Siempre Viva 123, Santiago" required>
+          </div>
+
+          <!-- Método de pago -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold" for="pago">💳 Método de Pago</label>
+            <select id="pago" name="pago" class="form-select" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="tarjeta">Tarjeta (PayPal)</option>
+              <option value="transferencia">Transferencia Bancaria</option>
+            </select>
+          </div>
+
+          <!-- Botón de pago -->
+          <button type="submit" class="checkout-btn mt-3">
+            ✅ Pagar y Confirmar Pedido
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Resumen del pedido -->
+    <div class="col-md-5">
+      <div class="summary-box">
+        <h5 class="mb-4" style="font-size: 1.6rem;">🛍 Resumen del Pedido</h5>
+
+        <!-- Productos -->
+        <div class="item d-flex justify-content-between">
+          <div>
+            <strong>Taladro Black+Decker</strong><br>
+            <small>Cantidad: 2</small>
+          </div>
+          <div>$40.000</div>
+        </div>
+
+        <div class="item d-flex justify-content-between">
+          <div>
+            <strong>Martillo Stanley</strong><br>
+            <small>Cantidad: 1</small>
+          </div>
+          <div>$12.000</div>
+        </div>
+
+        <!-- Total -->
+        <div class="d-flex justify-content-between mt-4 summary-total">
+          <div>Total:</div>
+          <div>$52.000</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

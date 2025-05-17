@@ -1,0 +1,124 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+  .page-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #333;
+  }
+
+  .card-custom {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 1rem rgba(0,0,0,0.1);
+  }
+
+  .card-header-custom {
+    background: linear-gradient(to right, #007bff, #00bfff);
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+  }
+
+  .btn-lg-custom {
+    font-size: 1.2rem;
+    padding: 12px 28px;
+    border-radius: 0.5rem;
+  }
+
+  .badge-pendiente {
+    background-color: #ffc107;
+    color: #212529;
+    padding: 0.5em 1em;
+    border-radius: 0.5rem;
+    font-weight: 500;
+  }
+
+  .table thead {
+    background-color: #f8f9fa;
+  }
+
+  .table td, .table th {
+    vertical-align: middle;
+  }
+</style>
+
+<div class="container py-5">
+  <!-- Título principal -->
+  <div class="text-center mb-5">
+    <h1 class="page-title"><i class="fas fa-clipboard-check me-2"></i> Aprobar Pedido</h1>
+    <p class="text-muted">Revisa y gestiona el pedido solicitado por el cliente</p>
+  </div>
+
+  <!-- Información del Pedido -->
+  <div class="card card-custom mb-4">
+    <div class="card-header card-header-custom">
+      <i class="fas fa-info-circle me-2"></i> Detalles del Pedido #12345
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-4"><strong>Cliente:</strong> Juan Pérez</div>
+        <div class="col-md-4"><strong>Fecha:</strong> 14 de mayo de 2025</div>
+        <div class="col-md-4">
+          <strong>Estado:</strong>
+          <span class="badge-pendiente">Pendiente de aprobación</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista de productos -->
+  <div class="card card-custom mb-4">
+    <div class="card-header bg-light fw-bold">
+      <i class="fas fa-box me-2"></i> Productos del Pedido
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th class="text-center">Cantidad</th>
+            <th class="text-end">Precio Unitario</th>
+            <th class="text-end">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Martillo Profesional</td>
+            <td class="text-center">2</td>
+            <td class="text-end">$12.000</td>
+            <td class="text-end">$24.000</td>
+          </tr>
+          <tr>
+            <td>Caja de Tornillos</td>
+            <td class="text-center">5</td>
+            <td class="text-end">$4.000</td>
+            <td class="text-end">$20.000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Total -->
+  <div class="text-end mb-4">
+    <h4 class="fw-bold">Total del Pedido: <span class="text-success">$44.000</span></h4>
+  </div>
+
+  <!-- Botones de acción -->
+  <div class="text-center">
+    <button class="btn btn-success btn-lg-custom me-3">
+      <i class="fas fa-check-circle me-1"></i> Aprobar Pedido
+    </button>
+    <button class="btn btn-danger btn-lg-custom">
+      <i class="fas fa-times-circle me-1"></i> Rechazar Pedido
+    </button>
+  </div>
+</div>
+{% endblock %}

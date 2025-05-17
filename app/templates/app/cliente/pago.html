@@ -1,0 +1,110 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .thank-you-section {
+    background-color: #f0f4f8;
+    padding: 80px 0;
+  }
+
+  .thank-you-box {
+    background: #fff;
+    padding: 50px 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+
+  .thank-you-icon {
+    font-size: 70px;
+    color: #28a745;
+    margin-bottom: 20px;
+  }
+
+  .thank-you-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+  }
+
+  .thank-you-message {
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #555;
+  }
+
+  .order-summary {
+    text-align: left;
+    margin-top: 30px;
+    font-size: 16px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .order-summary h5 {
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .btn-home {
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    padding: 12px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    margin-top: 30px;
+    display: inline-block;
+  }
+
+  .btn-home:hover {
+    background-color: #0056b3;
+  }
+
+  .btn-pdf {
+    background-color: #6c757d;
+    color: white;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-top: 15px;
+    display: inline-block;
+  }
+
+  .btn-pdf:hover {
+    background-color: #5a6268;
+  }
+</style>
+
+<div class="thank-you-section">
+  <div class="container">
+    <div class="thank-you-box mx-auto" style="max-width: 600px;">
+      <div class="thank-you-icon">✅</div>
+      <div class="thank-you-title">¡Gracias por tu compra!</div>
+      <div class="thank-you-message">
+        Tu pedido ha sido recibido con éxito. Te enviaremos un correo con los detalles.
+      </div>
+
+      <!-- Resumen del pedido (simulado) -->
+      <div class="order-summary">
+        <h5>Resumen del Pedido</h5>
+        <p><strong>N° de Pedido:</strong> #123456</p>
+        <p><strong>Fecha:</strong> 14 de mayo de 2025</p>
+        <p><strong>Total:</strong> $20.000</p>
+        <p><strong>Método de Pago:</strong> Transferencia</p>
+      </div>
+
+      <!-- Botón para descargar PDF (futuro) -->
+      <a href="#" class="btn-pdf">📄 Descargar Comprobante (PDF)</a><br>
+
+      <!-- Botón volver al inicio -->
+      <a href="{% url 'index' %}" class="btn-home">🏠 Volver al Inicio</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
