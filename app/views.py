@@ -123,3 +123,17 @@ def pedidos_admin(request):
 
 def inventario_admin(request):
     return render(request, 'app/admin/inventario_admin.html')
+
+#INFORMACION
+
+def contactanos(request):
+    return render(request, 'app/informacion/contactanos.html')
+
+def somos(request):
+    return render(request, 'app/informacion/somos.html')
+
+def terminos(request):
+    return render(request, 'app/informacion/terminos.html')
+
+
+

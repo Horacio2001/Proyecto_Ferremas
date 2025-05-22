@@ -35,9 +35,9 @@
 			<div id="top-header">
 				<div class="container">
 					<ul class="header-links pull-left">
-						<li><a href="#"><i class="fa fa-phone"></i> +569 2090 2854</a></li>
-						<li><a href="#"><i class="fa fa-envelope-o"></i> ferremas.2025@gmail.com</a></li>
-						<li><a href="#"><i class="fa fa-map-marker"></i> Av. Apoquindo #3220, Santiago, Chile</a></li>
+						<li><a href=""><i class="fa fa-phone"></i> +569 2090 2854</a></li>
+						<li><a href=""><i class="fa fa-envelope-o"></i> ferremas.2025@gmail.com</a></li>
+						<li><a href=""><i class="fa fa-map-marker"></i> San Diego #763, Santiago, Chile</a></li>
 					</ul>
 					<ul class="header-links pull-right">
 						
@@ -168,7 +168,7 @@
 							</div>
 							<div class="shop-body">
 								<h3>Herramientas<br>Construccion</h3>
-								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="#" class="cta-btn">Comprar Ahora <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -182,7 +182,7 @@
 							</div>
 							<div class="shop-body">
 								<h3>Materiales<br>Construccion</h3>
-								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="#" class="cta-btn">Comprar Ahora <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -196,7 +196,7 @@
 							</div>
 							<div class="shop-body">
 								<h3>Todo<br>Construccion</h3>
-								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="#" class="cta-btn">Comprar Ahora <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -328,7 +328,7 @@
 			<!-- section title -->
 			<div class="col-md-12">
 				<div class="section-title">
-					<h3 class="title">Top selling</h3>
+					<h3 class="title">Mas Vendidos</h3>
 					<div class="section-nav">
 						<ul class="section-tab-nav tab-nav">
 							<li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
@@ -773,9 +773,9 @@
                         <h3 class="footer-title">Contáctanos</h3>
                         <p>Estamos disponibles para ayudarte.</p>
                         <ul class="footer-links">
-                            <li><a href="#"><i class="fa fa-map-marker"></i> Av. Apoquindo #3220, Santiago, Chile</a></li>
-                            <li><a href="#"><i class="fa fa-phone"></i> +569 2090 2854</a></li>
-                            <li><a href="#"><i class="fa fa-envelope-o"></i> ferremas.2025@gmail.com</a></li>
+                            <li><i class="fa fa-map-marker"></i> San Diego #763, Santiago, Chile</a></li>
+                            <li><i class="fa fa-phone"></i> +569 2090 2854</a></li>
+                            <li><i class="fa fa-envelope-o"></i> ferremas.2025@gmail.com</a></li>
                         </ul>
                     </div>
                 </div>
@@ -785,10 +785,9 @@
                     <div class="footer">
                         <h3 class="footer-title">Información</h3>
                         <ul class="footer-links">
-                            <li><a href="#">Quiénes somos</a></li>
-                            <li><a href="#">Política de privacidad</a></li>
-                            <li><a href="#">Términos y condiciones</a></li>
-                            <li><a href="#">Contáctanos</a></li>
+                            <li><a href="{% url 'somos' %}">Quiénes somos</a></li>
+                            <li><a href="{% url 'terminos' %}">Términos y condiciones</a></li>
+                            <li><a href="{% url 'contactanos' %}">Contáctanos</a></li>
                         </ul>
                     </div>
                 </div>
@@ -798,10 +797,8 @@
                     <div class="footer">
                         <h3 class="footer-title">Servicio al cliente</h3>
                         <ul class="footer-links">
-                            <li><a href="#">Mi cuenta</a></li>
-                            <li><a href="#">Carrito</a></li>
-                            <li><a href="#">Seguimiento de pedido</a></li>
-                            <li><a href="#">Ayuda</a></li>
+                            <li><a href="{% url 'login' %}">Mi cuenta</a></li>
+                            <li><a href="{% url 'login' %}">Carrito</a></li>
                         </ul>
                     </div>
                 </div>

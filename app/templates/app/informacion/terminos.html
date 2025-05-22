@@ -1,0 +1,139 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .terminos-condiciones {
+    background-color: #f8f9fa;
+    padding: 60px 0;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .terminos-title {
+    text-align: center;
+    font-size: 2.7rem;
+    font-weight: 700;
+    color: #0d6efd;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .terminos-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: #0d6efd;
+    margin: 12px auto 0;
+    border-radius: 10px;
+  }
+
+  .terminos-section {
+    margin-bottom: 40px;
+  }
+
+  .terminos-section h3 {
+    color: #212529;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  .terminos-section h3 i {
+    margin-right: 10px;
+    color: #0d6efd;
+  }
+
+  .terminos-section p {
+    font-size: 1.5rem;
+    line-height: 1.8;
+    color: #343a40;
+    text-align: justify;
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .terminos-section h3 {
+      justify-content: center;
+    }
+  }
+</style>
+
+<section class="terminos-condiciones">
+  <div class="container">
+    <h2 class="terminos-title">Términos y Condiciones</h2>
+
+    <div class="terminos-section">
+      <h3><i class="fa fa-truck"></i> Primero | Despachos</h3>
+      <p>
+        Los despachos se realizan para compras superiores a $50.000. El valor dependerá de la comuna de destino.
+      </p>
+      <p>
+        Compras menores a ese monto deberán ser retiradas en nuestra sucursal ubicada en San Diego #763, Santiago. Un representante se comunicará para confirmar la disponibilidad del pedido.
+      </p>
+      <p>
+        El despacho considera el volumen y peso del pedido. Si se requiere más de un viaje, se notificará al cliente el costo adicional.
+      </p>
+      <p>
+        Los tiempos de entrega son entre 24 y 72 horas hábiles, y en algunas comunas hasta 96 hrs. Las entregas se realizan de lunes a viernes (los sábados se hacen envíos, pero no se cuentan como horas hábiles).
+      </p>
+      <p>
+        No se garantiza un horario específico. Las entregas pueden llegar entre 8:30 y 20:00 hrs. Rechazos por ausencia no reembolsarán el costo de envío.
+      </p>
+      <p>
+        Pedidos realizados después de las 12:00 hrs. comenzarán a ser procesados desde el siguiente día hábil.
+      </p>
+      <p>
+        El despacho incluye solo la entrega a pie de camión. No se realizan ingresos al domicilio, pisos superiores ni patios interiores. Si existen obstáculos (ferias, reparaciones viales, calles cerradas), debe informarse previamente.
+      </p>
+      <p>
+        En caso de rechazo injustificado, se devolverá el dinero descontando el costo del despacho.
+      </p>
+      <p>
+        Toda mercadería debe ser revisada al momento de entrega. Firmar la guía implica conformidad total. No se aceptarán reclamos posteriores por faltantes o errores si no se revisó en el momento.
+      </p>
+    </div>
+
+    <div class="terminos-section">
+      <h3><i class="fa fa-undo-alt"></i> Segundo | Devoluciones</h3>
+      <p>
+        Las devoluciones deben realizarse en la sucursal de Av. Principal #1234 con la boleta o factura original. El producto debe estar en perfecto estado y en su embalaje original.
+      </p>
+    </div>
+
+    <div class="terminos-section">
+      <h3><i class="fa fa-comments"></i> Tercero | Comunicación</h3>
+      <p>
+        Puedes contactarnos a través de:
+        <ul>
+          <li>📞 Teléfono: +569 2090 2854</li>
+          <li>📧 Email: ferremas.2025@gmail.com</li>
+          <li>📱 Redes Sociales: Facebook, Instagram y WhatsApp</li>
+        </ul>
+      </p>
+    </div>
+
+    <div class="terminos-section">
+      <h3><i class="fa fa-tags"></i> Cuarto | Precios</h3>
+      <p>
+        Los precios publicados en la web aplican solo para ventas online. Pueden variar respecto a los precios en tienda física.
+      </p>
+      <p>
+        Todos los precios incluyen IVA. Si el producto comprado no tiene stock, se realizará nota de crédito y reembolso tras la verificación y comunicación con el cliente.
+      </p>
+      <p>
+        El reembolso se hará en un plazo máximo de 24 horas hábiles luego de recibir los datos para la transferencia.
+      </p>
+    </div>
+
+    <div class="terminos-section">
+      <h3><i class="fa fa-credit-card"></i> Quinto | Medios de Pago</h3>
+      <p>
+        Aceptamos pagos con WebPay en la página web. En nuestras sucursales también puedes pagar con transferencia, tarjetas o efectivo.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .quienes-somos {
+    background-color: #f8f9fa;
+    padding: 60px 0;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 2.7rem;
+    font-weight: 700;
+    color: #0d6efd;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: #0d6efd;
+    margin: 12px auto 0;
+    border-radius: 10px;
+  }
+
+  .content-section {
+    margin-bottom: 60px;
+  }
+
+  .content-section h3 {
+    color: #212529;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .content-section h3 i {
+    margin-right: 10px;
+    color: #0d6efd;
+  }
+
+  .content-section p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #343a40;
+    text-align: justify;
+  }
+
+  .quienes-img {
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  @media (max-width: 768px) {
+    .content-section {
+      text-align: center;
+    }
+
+    .content-section h3 {
+      justify-content: center;
+    }
+  }
+</style>
+
+<section class="quienes-somos">
+  <div class="container">
+    <h2 class="section-title">¿Quiénes Somos?</h2>
+
+    <div class="row content-section">
+      <div class="col-md-6 mb-4">
+        <h3><i class="fa fa-briefcase"></i> Historia y Trayectoria</h3>
+        <p>
+          FERREMAS nació en Santiago en los años 80 como una pequeña ferretería familiar. Gracias al compromiso con la calidad y el servicio al cliente, la empresa ha crecido constantemente, convirtiéndose en un referente en el rubro de la ferretería y la construcción. Hoy contamos con más de 7 sucursales en todo Chile y una plataforma online en expansión.
+        </p>
+      </div>
+      <div class="col-md-6">
+        <img src="{% static 'app/img/logo1.jfif' %}" alt="Ferremas interior" class="quienes-img">
+      </div>
+    </div>
+
+    <div class="row content-section">
+      <div class="col-md-6 order-md-2 mb-4">
+        <h3><i class="fa fa-cogs"></i> Nuestros Productos</h3>
+        <p>
+          Ofrecemos un catálogo amplio de productos para construcción, electricidad, gasfitería, herramientas, seguridad industrial, pinturas y artículos de hogar. Trabajamos con marcas reconocidas como Bosch, Makita, Stanley, Sika, entre otras. Nuestra meta es que encuentres todo lo que necesitas en un solo lugar, con la mejor relación precio-calidad.
+        </p>
+      </div>
+      <div class="col-md-6 order-md-1">
+        <img src="{% static 'app/img/logo2.png' %}" alt="Herramientas Ferremas" class="quienes-img">
+      </div>
+    </div>
+
+    <div class="row content-section">
+      <div class="col-md-6 mb-4">
+        <h3><i class="fa fa-users"></i> Nuestro Equipo</h3>
+        <p>
+          En Ferremas, el capital humano es clave. Contamos con un equipo de trabajo comprometido y capacitado: vendedores expertos, administradores, bodegueros y personal de logística que aseguran una experiencia de compra ágil, confiable y cercana. Nuestro enfoque está en brindar soluciones y asesoría personalizada tanto a particulares como a empresas constructoras.
+        </p>
+      </div>
+      <div class="col-md-6">
+        <img src="{% static 'app/img/logo3.png' %}" alt="Equipo Ferremas" class="quienes-img">
+      </div>
+    </div>
+
+    <div class="row content-section">
+      <div class="col-md-12 text-center">
+        <h3><i class="fa fa-star"></i> Compromiso con el Cliente</h3>
+        <p>
+          Nuestra filosofía se basa en el respeto, la transparencia y el compromiso con el cliente. Buscamos ser más que una ferretería: un socio confiable para tus proyectos personales y profesionales. Ya sea que estés reparando tu hogar o levantando una obra, en Ferremas estamos para ayudarte con eficiencia y confianza.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
