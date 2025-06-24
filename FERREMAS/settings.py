@@ -13,6 +13,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 
+
+API_BASE_URL = 'http://127.0.0.1:8000'  # Ajusta según tu entorno
+
+# Configuración de sesión (asegúrate que esté presente)
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # O 'file' si prefieres
+SESSION_COOKIE_AGE = 1209600  # 2 semanas en segundos
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +33,7 @@ SECRET_KEY = 'django-insecure-a8++5stml!j#7tbugb07i$e2!bkxa$w@*rkpp9l%lvhn85l90!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -40,8 +47,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'app',
+    'paypal.standard.ipn', 
+    'paypal',
     
 ]
+
+# PayPal (sandbox)
+# -----------------------------------------------------------------------------
+PAYPAL_RECEIVER_EMAIL = "sb-sie3343239781@business.example.com"
+PAYPAL_TEST = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -58,7 +72,8 @@ ROOT_URLCONF = 'FERREMAS.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'app/templates'],
+        # Indica que Django busque en PROJECT_ROOT/templates
+        'DIRS': [ BASE_DIR / 'templates' ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,3 +145,22 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#RECORDAR ESTO ES PARA CERRAR SESSION AL CERRAR EL NAVEGADOR O RELOGEAR PAGINA
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+CACHES = {
+  'default': {
+    'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    'LOCATION': 'ferremas-cache',
+  }
+}
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Carpeta base del proyecto
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# URL pública para servir archivos subidos
+MEDIA_URL = '/media/'
+
+# Carpeta en disco donde se guardarán
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

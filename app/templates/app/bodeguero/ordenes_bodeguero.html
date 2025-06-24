@@ -2,129 +2,75 @@
 {% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
-  .section-title {
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin-bottom: 30px;
-    text-align: center;
-    color: #343a40;
-    border-bottom: 3px solid #0d6efd;
-    padding-bottom: 10px;
-    display: inline-block;
+  .page-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #333;
   }
-
-  .status-label {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .pendiente { background-color: #ffc107; color: #212529; }
-  .preparando { background-color: #0dcaf0; color: #fff; }
-  .listo { background-color: #28a745; color: #fff; }
-
-  .btn-preparar {
-    background-color: #0d6efd;
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-  }
-
-  .btn-preparar:hover {
-    background-color: #0b5ed7;
-  }
-
-  .btn-disabled {
-    background-color: #6c757d;
-    color: white;
-    border-radius: 8px;
-    padding: 6px 14px;
-    cursor: not-allowed;
-  }
-
-  .table-container {
-    background: #fff;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.07);
-  }
-
-  table {
-    border-collapse: separate;
-    border-spacing: 0;
-    width: 100%;
-  }
-
-  th, td {
-    padding: 16px;
-    text-align: left;
-    border-bottom: 2px solid #9b9b9b;
-  }
-
-  th {
-    background-color: #f1f3f5;
-    color: #212529;
-    font-weight: 600;
-  }
-
-  tr:last-child td {
-    border-bottom: none;
-  }
-
-  tbody tr:hover {
+  .table thead {
     background-color: #f8f9fa;
   }
+  .table td, .table th {
+    vertical-align: middle;
+  }
+  .badge-bg-warning { background-color: #ffc107; color: #212529; }
+  .badge-bg-success { background-color: #28a745; color: #fff; }
 </style>
 
-<div class="container mt-5">
-  <h2 class="section-title">Órdenes en Bodega</h2>
-
-  <div class="table-container mt-4">
-    <table>
-      <thead>
-        <tr>
-          <th># Orden</th>
-          <th>Fecha</th>
-          <th>Cliente</th>
-          <th>Productos</th>
-          <th>Estado</th>
-          <th>Acción</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>ORD-1001</td>
-          <td>14-05-2025</td>
-          <td>Juan Pérez</td>
-          <td>Taladro, Tornillos, Martillo</td>
-          <td><span class="status-label pendiente">Pendiente</span></td>
-          <td><a href="{% url 'preparar_pedido' %}" class="btn-preparar">Preparar</a></td>
-        </tr>
-        <tr>
-          <td>ORD-1002</td>
-          <td>13-05-2025</td>
-          <td>Ferretería Central</td>
-          <td>Brocas, Sierra Circular</td>
-          <td><span class="status-label preparando">En preparación</span></td>
-          <td><a href="{% url 'preparar_pedido' %}" class="btn-preparar">Continuar</a></td>
-        </tr>
-        <tr>
-          <td>ORD-1003</td>
-          <td>12-05-2025</td>
-          <td>Constructora Andes</td>
-          <td>Clavos, Cinta Métrica</td>
-          <td><span class="status-label listo">Listo</span></td>
-          <td><button class="btn-disabled" disabled>Completado</button></td>
-        </tr>
-      </tbody>
-    </table>
+<div class="container py-5">
+  <div class="text-center mb-5">
+    <h1 class="page-title"><i class="fas fa-boxes me-2"></i> Pedidos en Bodega</h1>
   </div>
+
+  {% if pedidos_data %}
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pedido in pedidos_data %}
+          <tr>
+            <td>#{{ pedido.pedido.id }}</td>
+            <td>{{ pedido.cliente }}</td>
+            <td>{{ pedido.fecha }}</td>
+            <td>${{ pedido.total|floatformat:0 }}</td>
+            <td>
+              {% if pedido.estado == 'En preparación' %}
+                <span class="badge badge-bg-warning">{{ pedido.estado }}</span>
+              {% else %}
+                <span class="badge badge-bg-success">{{ pedido.estado }}</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if pedido.estado == 'En preparación' %}
+                <form method="post" action="{% url 'preparar_pedido' pedido.pedido.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="fas fa-check me-1"></i> Marcar Listo
+                  </button>
+                </form>
+              {% else %}
+                <span class="text-muted">Esperando despacho</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">No hay pedidos en bodega actualmente</div>
+  {% endif %}
 </div>
 {% endblock %}

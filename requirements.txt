@@ -1,1 +1,51 @@
-Django
+# === Core Django ===
+Django==5.0.4
+djangorestframework==3.15.1
+django-crispy-forms==2.1
+crispy-bootstrap4==2024.1
+django-admin-interface==0.28.6
+whitenoise==6.7.0
+
+# === CAPTCHA ===
+django-simple-captcha==0.6.0
+django-multi-captcha-admin==2.0.0
+django-recaptcha==4.0.0
+
+# === PayPal ===
+django-paypal==2.1
+paypalrestsdk==1.13.3
+
+# === Imágenes ===
+cloudinary==1.40.0
+django-cloudinary-storage==0.3.0
+pillow==10.3.0
+
+# === Bases de Datos ===
+# Usa solo UNA de estas dos, dependiendo de qué uses realmente
+psycopg2-binary==2.9.9     # Para PostgreSQL
+# oracledb==3.1.1          # Descomenta solo si usas Oracle
+
+# === Utilidades ===
+python-slugify==8.0.4
+text-unidecode==1.3
+requests==2.31.0
+requests-file==2.1.0
+requests-toolbelt==1.0.0
+isodate==0.6.1
+zeep==4.2.1                # SOAP client (para servicios como Mindicador si lo necesitas)
+lxml==5.2.2
+sqlparse==0.5.0
+pytz==2024.1
+tzdata==2024.1
+
+# === Seguridad / SSL ===
+pyOpenSSL==24.1.0
+cryptography==42.0.5
+certifi==2024.2.2
+idna==3.7
+urllib3==2.2.1
+charset-normalizer==3.3.2
+
+# === Empaquetado / Deploy ===
+setuptools==68.2.2
+wheel==0.41.2

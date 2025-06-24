@@ -1,106 +1,69 @@
 {% extends 'app/base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block content %}
 <style>
-  h2 {
-    font-size: 2.2rem;
-    color: #0d6efd;
-    font-weight: 700;
-  }
-
-  .card {
-    border: none;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-    border-radius: 1.5rem;
-  }
-
-  .card .table {
-    font-size: 1.5rem;
-  }
-
-  .table thead th {
-    background-color: #343a40;
-    color: white;
-    font-size: 1.2rem;
-    text-align: center;
-  }
-
-  .table td {
-    vertical-align: middle;
-    font-size: 1.1rem;
-  }
-
-  .table-bordered td,
-  .table-bordered th {
-    border: 1.5px solid #dee2e6;
-  }
-
-  .badge {
-    font-size: 1rem;
-    padding: 8px 16px;
-    border-radius: 0.75rem;
-    font-weight: 600;
-  }
-
-  .badge-success {
-    background-color: #198754;
-  }
-
-  .badge-warning {
-    background-color: #ffc107;
-    color: #212529;
-  }
-
-  .badge-danger {
-    background-color: #dc3545;
-  }
-
-  .method-tarjeta {
-    color: #0d6efd;
-    font-weight: 600;
-  }
-
-  .method-transferencia {
-    color: #20c997;
-    font-weight: 600;
-  }
-
-  .filter-bar {
+  /* Tus estilos actuales... */
+  
+  /* Agrega estos nuevos estilos para la paginación */
+  .pagination {
     display: flex;
-    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
     flex-wrap: wrap;
   }
-
-  .filter-bar select,
-  .filter-bar input[type="date"] {
-    min-width: 160px;
-    font-size: 1rem;
-    padding: 8px;
+  
+  .page-item {
+    margin: 0 0.3rem;
+  }
+  
+  .page-link {
+    color: #0d6efd;
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #dee2e6;
     border-radius: 0.5rem;
+    transition: all 0.3s;
+  }
+  
+  .page-link:hover {
+    background-color: #e9ecef;
+    text-decoration: none;
+  }
+  
+  .page-item.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+  }
+  
+  .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #fff;
+    border-color: #dee2e6;
   }
 
-  @media (max-width: 768px) {
-    .filter-bar {
-      flex-direction: column;
-    }
+  /* Nuevos estilos para los badges de estado */
+  .badge {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    border-radius: 0.75rem;
+    min-width: 100px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .badge i {
+    font-size: 0.9em;
   }
 </style>
 
-<div class="container mt-5">
-  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-    <h2 class="mb-0">Historial de Pagos</h2>
-    <div class="filter-bar">
-      <select class="form-select" name="filtro_estado">
-        <option value="">Todos los estados</option>
-        <option value="confirmado">Confirmados</option>
-        <option value="pendiente">Pendientes</option>
-        <option value="rechazado">Rechazados</option>
-      </select>
-      <input type="date" class="form-control" name="fecha_desde">
-      <input type="date" class="form-control" name="fecha_hasta">
-    </div>
-  </div>
+<div class="container mt-5" style="margin-top: 3%;">
+  <h2 class="mb-4">Historial de Pagos</h2>
 
   <div class="card p-4">
     <div class="table-responsive">
@@ -108,45 +71,143 @@
         <thead>
           <tr>
             <th>ID Pago</th>
-            <th>Pedido</th>
+            <th>ID Pedido</th>
             <th>Cliente</th>
             <th>Monto</th>
             <th>Método</th>
             <th>Fecha</th>
             <th>Estado</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>#5021</td>
-            <td>#1023</td>
-            <td>Carlos Muñoz</td>
-            <td><strong>$60.000</strong></td>
-            <td><span class="method-tarjeta">Tarjeta</span></td>
-            <td>13/05/2025</td>
-            <td><span class="badge badge-success">Confirmado</span></td>
-          </tr>
-          <tr>
-            <td>#5022</td>
-            <td>#1024</td>
-            <td>María López</td>
-            <td><strong>$45.000</strong></td>
-            <td><span class="method-transferencia">Transferencia</span></td>
-            <td>14/05/2025</td>
-            <td><span class="badge badge-warning">Pendiente</span></td>
-          </tr>
-          <tr>
-            <td>#5023</td>
-            <td>#1025</td>
-            <td>Pedro Rojas</td>
-            <td><strong>$75.000</strong></td>
-            <td><span class="method-tarjeta">Tarjeta</span></td>
-            <td>14/05/2025</td>
-            <td><span class="badge badge-danger">Rechazado</span></td>
-          </tr>
+          {% for item in page_obj.object_list %}
+            {% with pago=item.pago pedido=item.pedido total=item.total %}
+            <tr>
+              <td>#{{ pago.id }}</td>
+              <td>
+                {% if pedido %}
+                  #{{ pedido.id }}
+                {% else %}
+                  —
+                {% endif %}
+              </td>
+              <td>
+                {% if pedido %}
+                  {{ pedido.cliente.user.get_full_name }}
+                {% else %}
+                  —
+                {% endif %}
+              </td>
+              <td><strong>$ {{ total|intcomma }}</strong></td>
+              <td>
+                {% if pago.tipo_pago.tipo_pago == 'tarjeta' %}
+                  <span class="method-tarjeta">Tarjeta</span>
+                {% else %}
+                  <span class="method-transferencia">Transferencia</span>
+                {% endif %}
+              </td>
+              <td>{{ pago.fecha_pago|date:"d/m/Y" }}</td>
+              <td>
+                {% if pago.estado_pago == 'Pendiente' %}
+                  <span class="badge bg-warning text-dark fs-6 p-2" style="background-color: #FFC107; color: #000 !important;">
+                    <i class="fas fa-clock me-1"></i> Pendiente
+                  </span>
+                {% elif pago.estado_pago == 'Confirmado' %}
+                  <span class="badge bg-success text-white fs-6 p-2" style="background-color: #198754;">
+                    <i class="fas fa-check-circle me-1"></i> Confirmado
+                  </span>
+                {% else %}
+                  <span class="badge bg-danger text-white fs-6 p-2" style="background-color: #DC3545;">
+                    <i class="fas fa-times-circle me-1"></i> Rechazado
+                  </span>
+                {% endif %}
+              </td>
+              <td>
+                {% if pago.estado_pago == 'Pendiente' %}
+                  <a href="{% url 'confirmar_pago' pago.id %}" class="btn btn-success btn-sm me-1">
+                    <i class="fa fa-check-circle"></i> Confirmar
+                  </a>
+                  <a href="{% url 'confirmar_pago' pago.id %}?rechazar=1" class="btn btn-danger btn-sm">
+                    <i class="fa fa-times-circle"></i> Rechazar
+                  </a>
+                {% else %}
+                  <em>—</em>
+                {% endif %}
+              </td>
+            </tr>
+            {% endwith %}
+          {% empty %}
+            <tr>
+              <td colspan="8">No hay pagos registrados.</td>
+            </tr>
+          {% endfor %}
         </tbody>
       </table>
+      
+      <!-- Sección de paginación (sin cambios) -->
+      {% if page_obj.paginator.num_pages > 1 %}
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page=1" aria-label="First">
+                <span aria-hidden="true">&laquo;&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">&laquo;&laquo;</span>
+            </li>
+            <li class="page-item disabled">
+              <span class="page-link">&laquo;</span>
+            </li>
+          {% endif %}
+          
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+              </li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+          
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                <span aria-hidden="true">&raquo;&raquo;</span>
+              </a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <span class="page-link">&raquo;</span>
+            </li>
+            <li class="page-item disabled">
+              <span class="page-link">&raquo;&raquo;</span>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
     </div>
   </div>
 </div>
+
+<!-- Asegúrate de tener Font Awesome para los iconos -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 {% endblock %}

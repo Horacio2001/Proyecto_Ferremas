@@ -2,12 +2,65 @@
 
 <!DOCTYPE html>
 <html lang="en">
+<style>
+.banner-section {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.banner-img {
+	width: 100%;
+	height: auto;
+	display: block;
+	object-fit: cover;
+}
+
+.banner-carousel {
+  position: relative;
+  width: 100%;
+  max-height: 400px;
+  overflow: hidden;
+}
+
+.banner-slide img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+.banner-slide {
+      position: relative;
+    }
+
+    .overlay-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 2rem;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .banner-slide img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+</style>
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>FERREMAS - Ecommerce</title>
-
+		
 		<!-- Google font -->
 		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
@@ -26,135 +79,138 @@
 
 		<!-- Custom stlylesheet -->
 		<link type="text/css" rel="stylesheet" href="{% static 'app/css/style.css' %}"/>
+		<link type="text/css" rel="stylesheet" href="{% static 'app/css/slick.css' %}"/>
+		<link type="text/css" rel="stylesheet" href="{% static 'app/css/slick-theme.css' %}"/>
 
 	</head>
 	<body>
 		<!-- HEADER -->
-		<header>
-			<!-- TOP HEADER -->
-			<div id="top-header">
-				<div class="container">
-					<ul class="header-links pull-left">
-						<li><a href=""><i class="fa fa-phone"></i> +569 2090 2854</a></li>
-						<li><a href=""><i class="fa fa-envelope-o"></i> ferremas.2025@gmail.com</a></li>
-						<li><a href=""><i class="fa fa-map-marker"></i> San Diego #763, Santiago, Chile</a></li>
-					</ul>
-					<ul class="header-links pull-right">
-						
-						<li><a href="{% url 'login' %}"><i class="fa fa-user-o"></i> Mi Cuenta</a></li>
-					</ul>
-				</div>
-			</div>
-			<!-- /TOP HEADER -->
+<header>
+    <!-- TOP HEADER -->
+    <div id="top-header">
+        <div class="container">
+            <ul class="header-links pull-left">
+                <li><a href=""><i class="fa fa-phone"></i> +569 2090 2854</a></li>
+                <li><a href=""><i class="fa fa-envelope-o"></i> ferremas.2025@gmail.com</a></li>
+                <li><a href=""><i class="fa fa-map-marker"></i> San Diego #763, Santiago, Chile</a></li>
+            </ul>
+            <ul class="header-links pull-right">
+                {% if request.session.usuario %}
+                    <li>
+                        <a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Cerrar sesión</a>
+						                      <!-- Información de usuario -->
+                            <div style="margin-left: -40%;" class="user-info">
+                                <i class="fa fa-user-circle me-1"></i>
+                                <span style="color: aliceblue;" class="d-none d-md-inline">
+                                    Hola, {{ request.session.usuario.nombre|default:"Usuario" }}
+                                    <small class="text-muted">({{ request.session.usuario.rol|title }})</small>
+                                </span>
+                            </div>
+                            
+                    </li>
+                {% else %}
+                    <li><a style="margin-left: -30%;" href="{% url 'login' %}"><i class="fa fa-user-o"></i> No Logueado</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    <!-- /TOP HEADER -->
 
-			<!-- MAIN HEADER -->
-			<div id="header">
-				<div class="container">
-					<div class="row">
-						<!-- LOGO -->
-						<div class="col-md-3">
-							<div class="header-logo">
-								<a href="/" class="logo">
-									<img src="{% static 'app/img/logo.png' %}" class="img-fluid" width="150px" height="80px" >
-								</a>
-							</div>
-						</div>
-						<!-- /LOGO -->
+    <!-- MAIN HEADER -->
+    <div id="header">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- LOGO -->
+                <div class="col-md-2">
+                    <div class="header-logo">
+                        <a href="{% url 'index' %}" class="logo">
+                            <img src="{% static 'app/img/logo.png' %}" class="img-fluid" width="150" height="80">
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- SEARCH BAR -->
+                <div class="col-md-6" style="margin-left: 12%;">
+                    <div class="header-search">
+                        <form>
+                            <select class="input-select">
+                                <option value="0">Categorías</option>
+                                <option value="1">Herramientas</option>
+                                <option value="2">Materiales</option>
+                                <option value="3">Accesorios</option>
+                            </select>
+                            <input class="input" placeholder="¿Que estas buscando?">
+                            <button class="search-btn">Buscar</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- /SEARCH BAR -->
 
-						<!-- SEARCH BAR -->
-						<div class="col-md-6">
-							<div class="header-search">
-								<form>
-									<select class="input-select">
-										<option value="0">Categorias</option>
-										<option value="1">Categoria 01</option>
-										<option value="1">Categoria 02</option>
-									</select>
-									<input class="input" placeholder="¿Que estas buscando?">
-									<button class="search-btn">Buscar</button>
-								</form>
-							</div>
-						</div>
-						<!-- /SEARCH BAR -->
-
-						<!-- ACCOUNT -->
-						<div class="col-md-3 clearfix">
-							<div class="header-ctn">
-								<!-- Wishlist -->
-								<div>
-									<a href="#">
-										<i class="fa fa-heart-o"></i>
-										<span>Favoritos</span>
-										<div class="qty">2</div>
-									</a>
-								</div>
-								<!-- /Wishlist -->
-
-								<!-- Cart -->
-								<div class="dropdown">
-									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-										<i class="fa fa-shopping-cart"></i>
-										<span>Carrito</span>
-										<div class="qty">3</div>
-									</a>
-									<div class="cart-dropdown">
-										<div class="cart-list">
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="{% static 'app/img/product01.png' %}" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
-
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="{% static 'app/img/product02.png' %}" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
-										</div>
-										<div class="cart-summary">
-											<small>3 Item(s) selected</small>
-											<h5>SUBTOTAL: $2940.00</h5>
-										</div>
-										<div class="cart-btns">
-											<a href="#">View Cart</a>
-											<a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
-										</div>
-									</div>
-								</div>
-								<!-- /Cart -->
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</header>
-
+                <!-- MENÚ DE ACCIONES -->
+                <div class="col-md-4" style="margin-left: -13%;">
+                    <div class="header-ctn d-flex justify-content-end align-items-center">
+                        {% if request.session.usuario %}
+                            <!-- Carrito (si es cliente) -->
+                            {% if request.session.usuario.rol == 'cliente' %}
+                                <div class="me-4">
+                                    <a href="{% url 'carrito_cliente' %}" class="text-decoration-none">
+                                        <i class="fa fa-shopping-cart"></i> Carrito
+                                        <div class="qty">3</div>
+                                    </a>
+                                </div>
+                            {% endif %}
+                            
+      
+                        {% else %}
+                            <!-- Usuario no logueado -->
+                            <div class="me-3">
+                                <a href="{% url 'registro_cliente' %}" class="text-decoration-none">
+                                    <i class="fa fa-user-plus"></i> <span class="d-none d-md-inline">Registrarse</span>
+                                </a>
+                            </div>
+                            <div>
+                                <a href="{% url 'login' %}" class="text-decoration-none">
+                                    <i class="fa fa-sign-in"></i> <span class="d-none d-md-inline">Ingresar</span>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 		<!-- NAVIGATION -->
 		<nav id="navigation">
 			<div class="container">
 				<div id="responsive-nav">
 					<ul class="main-nav nav navbar-nav">
 						<li class="active"><a href="#">Inicio</a></li>
-						<li><a href="#">Hot Deals</a></li>
-						<li><a href="#">Categories</a></li>
-						<li><a href="#">Laptops</a></li>
-						<li><a href="#">Smartphones</a></li>
-						<li><a href="#">Cameras</a></li>
-						<li><a href="#">Accessories</a></li>
+						<li><a href="{% url 'catalogo_cliente' %}">Catalogo</a></li>
 					</ul>
 				</div>
 			</div>
 		</nav>
+
+
+
+  <!-- Controles -->
+
+<!-- Carrusel de Banners -->
+<div class="banner-carousel slick-slider">
+  <div class="banner-slide">
+    <img style="width: 90%; margin-left: 5%;" src="{% static 'app/img/ferreteria.jpg' %}" alt="Banner 1">
+    <div class="overlay-text">
+    </div>
+  </div>
+  <div class="banner-slide">
+    <img style="width: 90%; margin-left: 5%;" src="{% static 'app/img/ferreteria2.jpeg' %}"  alt="Banner 2">
+  </div>
+  <div class="banner-slide">
+    <img style="width: 90%; margin-left: 5%;" src="{% static 'app/img/ferreteria2.jpeg' %}" alt="Banner 3">
+  </div>
+</div>
+
 
 		<!-- SECTION -->
 		<div class="section">
@@ -168,7 +224,7 @@
 							</div>
 							<div class="shop-body">
 								<h3>Herramientas<br>Construccion</h3>
-								<a href="#" class="cta-btn">Comprar Ahora <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="{% url 'catalogo_cliente' %}" class="cta-btn">Comprar Ahora <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -182,7 +238,7 @@
 							</div>
 							<div class="shop-body">
 								<h3>Materiales<br>Construccion</h3>
-								<a href="#" class="cta-btn">Comprar Ahora <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="{% url 'catalogo_cliente' %}" class="cta-btn">Comprar Ahora <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -196,7 +252,7 @@
 							</div>
 							<div class="shop-body">
 								<h3>Todo<br>Construccion</h3>
-								<a href="#" class="cta-btn">Comprar Ahora <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="{% url 'catalogo_cliente' %}" class="cta-btn">Comprar Ahora <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -205,6 +261,11 @@
 			</div>
 		</div>
 
+
+
+
+
+		
 		<!-- SECTION -->
 		<div class="section">
 			<div class="container">
@@ -213,13 +274,13 @@
 					<!-- section title -->
 					<div class="col-md-12">
 						<div class="section-title">
-							<h3 class="title">New Products</h3>
+							<h3 class="title">Productos Destacados</h3>
 							<div class="section-nav">
 								<ul class="section-tab-nav tab-nav">
-									<li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
-									<li><a data-toggle="tab" href="#tab1">Smartphones</a></li>
-									<li><a data-toggle="tab" href="#tab1">Cameras</a></li>
-									<li><a data-toggle="tab" href="#tab1">Accessories</a></li>
+									<li class="active"><a data-toggle="tab" href="#tab1">Taladros</a></li>
+									<li><a data-toggle="tab" href="#tab1">Herramientas</a></li>
+									<li><a data-toggle="tab" href="#tab1">Materiales</a></li>
+									<li><a data-toggle="tab" href="#tab1">Sierras Electricas</a></li>
 								</ul>
 							</div>
 						</div>
@@ -238,7 +299,63 @@
 												<img src="{% static 'app/img/product01.png' %}" alt="">
 												<div class="product-label">
 													<span class="sale">-20%</span>
-													<span class="new">NEW</span>
+													<span class="new">Nuevo</span>
+												</div>
+											</div>
+											<div class="product-body">
+												<p class="product-category">Taladros</p>
+												<h3 class="product-name"><a href="#">Taladro Inalámbrico Percutor 10 mm 20 V/2 Baterías</a></h3>
+												<h4 class="product-price">$ 169.990 <del class="product-old-price">$189.990</del></h4>
+												<div class="product-rating">
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+												</div>
+												<div class="product-btns">
+													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+												</div>
+											</div>
+										</div>
+										<!-- /product -->
+										 <!-- product -->
+										<div class="product">
+											<div class="product-img">
+												<img src="{% static 'app/img/product01.png' %}" alt="">
+												<div class="product-label">
+													<span class="sale">-20%</span>
+													<span class="new">Nuevo</span>
+												</div>
+											</div>
+											<div class="product-body">
+												<p class="product-category">Taladros</p>
+												<h3 class="product-name"><a href="#">Taladro Inalámbrico Percutor 10 mm 20 V/2 Baterías</a></h3>
+												<h4 class="product-price">$ 169.990 <del class="product-old-price">$189.990</del></h4>
+												<div class="product-rating">
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+												</div>
+												<div class="product-btns">
+													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+												</div>
+											</div>
+										</div>
+										<!-- /product -->
+										 <!-- product -->
+										<div class="product">
+											<div class="product-img">
+												<img src="{% static 'app/img/product01.png' %}" alt="">
+												<div class="product-label">
+													<span class="sale">-20%</span>
+													<span class="new">Nuevo</span>
 												</div>
 											</div>
 											<div class="product-body">
@@ -273,51 +390,12 @@
 		
 		<!-- Continuación del código después -->
 
-<!-- HOT DEAL SECTION -->
-<div id="hot-deal" class="section">
-	<!-- container -->
-	<div class="container">
-		<!-- row -->
-		<div class="row">
-			<div class="col-md-12">
-				<div class="hot-deal">
-					<ul class="hot-deal-countdown">
-						<li>
-							<div>
-								<h3>02</h3>
-								<span>Days</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<h3>10</h3>
-								<span>Hours</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<h3>34</h3>
-								<span>Mins</span>
-							</div>
-						</li>
-						<li>
-							<div>
-								<h3>60</h3>
-								<span>Secs</span>
-							</div>
-						</li>
-					</ul>
-					<h2 class="text-uppercase">hot deal this week</h2>
-					<p>New Collection Up to 50% OFF</p>
-					<a class="primary-btn cta-btn" href="#">Shop now</a>
-				</div>
-			</div>
-		</div>
-		<!-- /row -->
-	</div>
-	<!-- /container -->
+<!-- BANNER SECTION -->
+<div class="banner-section">
+	<img src="{% static 'app/img/banner ferreteria.jpg' %}" alt="Banner Promocional" class="banner-img">
 </div>
-<!-- /HOT DEAL SECTION -->
+<!-- /BANNER SECTION -->
+
 
 <!-- SECTION -->
 <div class="section">
@@ -331,10 +409,11 @@
 					<h3 class="title">Mas Vendidos</h3>
 					<div class="section-nav">
 						<ul class="section-tab-nav tab-nav">
-							<li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
-							<li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
-							<li><a data-toggle="tab" href="#tab2">Cameras</a></li>
-							<li><a data-toggle="tab" href="#tab2">Accessories</a></li>
+							<li class="active"><a data-toggle="tab" href="#tab2">Taladros</a></li>
+							<li><a data-toggle="tab" href="#tab2">Herramientas
+							</a></li>
+							<li><a data-toggle="tab" href="#tab2">Materiales</a></li>
+							<li><a data-toggle="tab" href="#tab2">Sierras Electricas</a></li>
 						</ul>
 					</div>
 				</div>
@@ -353,14 +432,14 @@
 									<div class="product-img">
 										<img src="{% static 'app/img/product06.png' %}" alt="">
 										<div class="product-label">
-											<span class="sale">-30%</span>
+											<span class="sale">-15%</span>
 											<span class="new">NEW</span>
 										</div>
 									</div>
 									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+										<p class="product-category">Categoria</p>
+										<h3 class="product-name"><a href="#">Sierra Circular Makita 71/4" 5007nk</a></h3>
+										<h4 class="product-price">$178.490<del class="product-old-price">$209.990</del></h4>
 										<div class="product-rating">
 											<i class="fa fa-star"></i>
 											<i class="fa fa-star"></i>
@@ -369,13 +448,13 @@
 											<i class="fa fa-star"></i>
 										</div>
 										<div class="product-btns">
-											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">Añadir a Favorito</span></button>
 											<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
 											<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
 										</div>
 									</div>
 									<div class="add-to-cart">
-										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Agregar al carrito</button>
 									</div>
 								</div>
 								<!-- /product -->
@@ -385,13 +464,13 @@
 									<div class="product-img">
 										<img src="{% static 'app/img/product07.png' %}" alt="">
 										<div class="product-label">
-											<span class="new">NEW</span>
+											<span class="new">Nuevo</span>
 										</div>
 									</div>
 									<div class="product-body">
 										<p class="product-category">Taladros</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+										<h3 class="product-name"><a href="#">Policarbonato</a></h3>
+										<h4 class="product-price">$8.990 <del class="product-old-price">$10.990</del></h4>
 										<div class="product-rating">
 											<i class="fa fa-star"></i>
 											<i class="fa fa-star"></i>
@@ -400,13 +479,13 @@
 											<i class="fa fa-star-o"></i>
 										</div>
 										<div class="product-btns">
-											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">Añadir a Favorito</span></button>
 											<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
 											<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
 										</div>
 									</div>
 									<div class="add-to-cart">
-										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Agregar al carrito</button>
 									</div>
 								</div>
 								<!-- /product -->
@@ -428,292 +507,7 @@
 
 			<!-- Continuación del código después 3 -->
 
-<!-- SECTION -->
-<div class="section">
-	<!-- container -->
-	<div class="container">
-		<!-- row -->
-		<div class="row">
-			<div class="col-md-4 col-xs-6">
-				<div class="section-title">
-					<h4 class="title">Top selling</h4>
-					<div class="section-nav">
-						<div id="slick-nav-3" class="products-slick-nav"></div>
-					</div>
-				</div>
 
-				<div class="products-widget-slick" data-nav="#slick-nav-3">
-					<div>
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product07.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- /product widget -->
-
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product08.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- /product widget -->
-
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product09.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- product widget -->
-					</div>
-
-					<div>
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product01.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- /product widget -->
-
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product02.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- /product widget -->
-
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product03.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- product widget -->
-					</div>
-				</div>
-			</div>
-
-			<div class="col-md-4 col-xs-6">
-				<div class="section-title">
-					<h4 class="title">Top selling</h4>
-					<div class="section-nav">
-						<div id="slick-nav-4" class="products-slick-nav"></div>
-					</div>
-				</div>
-
-				<div class="products-widget-slick" data-nav="#slick-nav-4">
-					<div>
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product04.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- /product widget -->
-
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product05.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- /product widget -->
-
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product06.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- product widget -->
-					</div>
-
-					<div>
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product07.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- /product widget -->
-
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product08.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- /product widget -->
-
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product09.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- product widget -->
-					</div>
-				</div>
-			</div>
-
-			<div class="clearfix visible-sm visible-xs"></div>
-
-			<div class="col-md-4 col-xs-6">
-				<div class="section-title">
-					<h4 class="title">Top selling</h4>
-					<div class="section-nav">
-						<div id="slick-nav-5" class="products-slick-nav"></div>
-					</div>
-				</div>
-
-				<div class="products-widget-slick" data-nav="#slick-nav-5">
-					<div>
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product01.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- /product widget -->
-
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product02.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- /product widget -->
-
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product03.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- product widget -->
-					</div>
-
-					<div>
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product04.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- /product widget -->
-
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product05.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- /product widget -->
-
-						<!-- product widget -->
-						<div class="product-widget">
-							<div class="product-img">
-								<img src="app/img/product06.png" alt="">
-							</div>
-							<div class="product-body">
-								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#">product name goes here</a></h3>
-								<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-							</div>
-						</div>
-						<!-- product widget -->
-					</div>
-				</div>
-			</div>
 
 		</div>
 		<!-- /row -->
@@ -731,7 +525,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="newsletter">
-                    <p>Sign Up for the <strong>NEWSLETTER</strong></p>
+                    <p>Ingresa tu correo <strong>Suscribete</strong></p>
                     <form>
                         <input class="input" type="email" placeholder="Ingresa Tu Email">
                         <button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribete</button>
@@ -843,5 +637,34 @@
 <script src="{% static 'app/JS/nouislider.min.js' %}"></script>
 <script src="{% static 'app/JS/jquery.zoom.min.js' %}"></script>
 <script src="{% static 'app/JS/main.js' %}"></script>
+
+<!-- Slick CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+
+<!-- Slick JS -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Slick JS -->
+<script src="{% static 'app/js/slick.min.js' %}"></script>
+
+
+<!-- Activar carrusel -->
+<script>
+  $(document).ready(function(){
+    $('.banner-carousel').slick({
+      autoplay: true,
+      autoplaySpeed: 3000,
+      dots: true,
+      arrows: true,
+      infinite: true,
+      fade: true,
+      speed: 800
+    });
+  });
+</script>
 </body>
 </html>

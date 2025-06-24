@@ -22,7 +22,7 @@
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     width: 100%;
-    max-width: 500px;
+    max-width: 600px;
     animation: fadeIn 0.8s ease-in-out;
   }
 
@@ -34,14 +34,14 @@
   .register-box h2 {
     font-size: 2.2rem;
     font-weight: bold;
-    color: #28a745;
+    color: #0d6efd;
     text-align: center;
     margin-bottom: 1.8rem;
   }
 
   .form-group {
     position: relative;
-    margin-bottom: 1.4rem;
+    margin-bottom: 1.5rem;
   }
 
   .form-group i {
@@ -57,37 +57,34 @@
     font-size: 1.1rem;
     padding: 12px 16px 12px 40px;
     border-radius: 10px;
+    border: 1px solid #ced4da;
+    width: 100%;
   }
 
-  .form-check-label {
-    font-size: 0.95rem;
-    margin-left: 4px;
+  .form-error {
+    color: #dc3545;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    margin-left: 5px;
   }
 
-  .btn-success {
+  .btn-primary {
     font-size: 1.2rem;
     padding: 12px;
     border-radius: 12px;
     font-weight: 600;
     width: 100%;
-    background-color: #28a745;
+    background-color: #0d6efd;
     border: none;
     transition: background 0.3s ease-in-out;
   }
 
-  .btn-success:hover {
-    background-color: #218838;
-  }
-
-  .alert-danger {
-    font-size: 1rem;
-    padding: 12px;
-    margin-bottom: 1.5rem;
-    border-radius: 10px;
+  .btn-primary:hover {
+    background-color: #0b5ed7;
   }
 
   .text-center a {
-    color: #28a745;
+    color: #0d6efd;
     font-weight: 600;
     text-decoration: none;
   }
@@ -104,58 +101,96 @@
 
 <div class="register-container">
   <div class="register-box">
-    <h2>📝 Crear Cuenta</h2>
-
-    {% if form.errors %}
-      <div class="alert alert-danger">
-        <ul class="mb-0">
-          {% for field in form %}
-            {% for error in field.errors %}
-              <li>{{ error }}</li>
-            {% endfor %}
-          {% endfor %}
-          {% for error in form.non_field_errors %}
-            <li>{{ error }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %}
-
-    <form method="post" action="{% url 'registro_cliente' %}">
+    <h2>📝 Registro de Cliente</h2>
+    <form method="post">
       {% csrf_token %}
 
+      <!-- Usuario -->
       <div class="form-group">
         <i class="fas fa-user"></i>
-        <input type="text" class="form-control" name="username" id="id_username" placeholder="Usuario" value="{{ form.username.value }}" required>
+        <input type="text" name="username" id="id_username" class="form-control" placeholder="Usuario" value="{{ form.username.value|default_if_none:'' }}">
+        {% for error in form.username.errors %}
+          <div class="form-error">{{ error }}</div>
+        {% endfor %}
       </div>
 
+      <!-- Contraseña -->
+      <div class="form-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" name="password1" id="id_password1" class="form-control" placeholder="Contraseña">
+        {% for error in form.password1.errors %}
+          <div class="form-error">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <!-- Confirmar contraseña -->
+      <div class="form-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" name="password2" id="id_password2" class="form-control" placeholder="Confirmar contraseña">
+        {% for error in form.password2.errors %}
+          <div class="form-error">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <!-- RUT -->
+      <div class="form-group">
+        <i class="fas fa-id-card"></i>
+        <input type="number" name="rut" id="id_rut" class="form-control" placeholder="RUT" value="{{ form.rut.value|default_if_none:'' }}">
+        {% if form.rut.errors %}
+          <div class="form-error">{{ form.rut.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Nombre -->
+      <div class="form-group">
+        <i class="fas fa-user-tag"></i>
+        <input type="text" name="nombre" id="id_nombre" class="form-control" placeholder="Nombre" value="{{ form.nombre.value|default_if_none:'' }}">
+        {% if form.nombre.errors %}
+          <div class="form-error">{{ form.nombre.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Apellido -->
+      <div class="form-group">
+        <i class="fas fa-user-tag"></i>
+        <input type="text" name="apellido" id="id_apellido" class="form-control" placeholder="Apellido" value="{{ form.apellido.value|default_if_none:'' }}">
+        {% if form.apellido.errors %}
+          <div class="form-error">{{ form.apellido.errors.0 }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Email -->
       <div class="form-group">
         <i class="fas fa-envelope"></i>
-        <input type="email" class="form-control" name="email" id="id_email" placeholder="Correo electrónico" value="{{ form.email.value }}" required>
+        <input type="email" name="email" id="id_email" class="form-control" placeholder="Correo electrónico" value="{{ form.email.value|default_if_none:'' }}">
+        {% if form.email.errors %}
+          <div class="form-error">{{ form.email.errors.0 }}</div>
+        {% endif %}
       </div>
 
+      <!-- Teléfono -->
       <div class="form-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" class="form-control" name="password1" id="id_password1" placeholder="Contraseña" required>
+        <i class="fas fa-phone"></i>
+        <input type="number" name="telefono" id="id_telefono" class="form-control" placeholder="Teléfono" value="{{ form.telefono.value|default_if_none:'' }}">
+        {% if form.telefono.errors %}
+          <div class="form-error">{{ form.telefono.errors.0 }}</div>
+        {% endif %}
       </div>
 
+      <!-- Dirección -->
       <div class="form-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" class="form-control" name="password2" id="id_password2" placeholder="Confirmar Contraseña" required>
+        <i class="fas fa-home"></i>
+        <input type="text" name="direccion" id="id_direccion" class="form-control" placeholder="Dirección" value="{{ form.direccion.value|default_if_none:'' }}">
+        {% if form.direccion.errors %}
+          <div class="form-error">{{ form.direccion.errors.0 }}</div>
+        {% endif %}
       </div>
 
-      <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" name="suscribir_noticias" id="id_suscribir_noticias" {% if form.suscribir_noticias.value %}checked{% endif %}>
-        <label class="form-check-label" for="id_suscribir_noticias">
-          Deseo recibir noticias y ofertas por correo
-        </label>
-      </div>
-
-      <button type="submit" class="btn btn-success">Registrarse</button>
+      <button type="submit" class="btn btn-primary">Registrarse</button>
     </form>
 
-    <div class="text-center mt-3">
-      <p>¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
+    <div class="text-center">
+      <p>¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
     </div>
   </div>
 </div>

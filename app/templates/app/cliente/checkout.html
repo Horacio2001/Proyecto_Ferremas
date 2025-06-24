@@ -1,5 +1,8 @@
 {% extends 'app/base.html' %}
 {% load static %}
+{% load humanize %}
+
+{% block title %}Checkout – FERREMAS{% endblock %}
 
 {% block content %}
 <style>
@@ -80,35 +83,64 @@
     }
   }
 </style>
+<nav id="navigation2">
+    <div class="container">
+        <div id="responsive-nav">
+            <ul class="main-nav nav navbar-nav">
+                <li>
+                    <a href="javascript:history.back()" class="back-arrow">
+                        <i class="fa fa-arrow-left"></i> Volver
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-<div class="container checkout-section py-5">
-  <h2 class="text-center mb-5" style="font-size: 2rem;">🧾 Finalizar Compra</h2>
+<div class="container checkout-section py-5" style="margin-top: 5%; margin-bottom: 10%;">
+    <h2 class="text-center mb-5" style="font-size: 300%; margin-bottom: 5%;">🧾 Finalizar Compra</h2>
 
   <div class="row g-4">
-    <!-- Formulario de envío y pago -->
+    <!-- Formulario de checkout -->
     <div class="col-md-7">
       <div class="form-box">
         <form method="post">
           {% csrf_token %}
 
-          <!-- Dirección -->
+          <!-- Tipo de entrega -->
           <div class="mb-4">
+            <label class="form-label fw-semibold" for="entrega" style="margin-bottom: 3%;">🚚 Tipo de Entrega</label>
+            <select id="entrega" name="entrega" class="form-select" required onchange="toggleDireccion(this.value)">
+              <option disabled {% if not entrega_prev %}selected{% endif %}>Selecciona una opción</option>
+              <option value="retiro" {% if entrega_prev == 'retiro' %}selected{% endif %}>Retiro en tienda (San Diego #763, Santiago)</option>
+              <option value="despacho" {% if entrega_prev == 'despacho' %}selected{% endif %}>Despacho a domicilio (+ $2.990)</option>
+            </select>
+          </div>
+
+          <!-- Dirección (aparece solo si ‘despacho’) -->
+          <div class="mb-4" id="direccion_box" style="display: none;">
             <label class="form-label fw-semibold" for="direccion">📍 Dirección de Envío</label>
-            <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ej. Av. Siempre Viva 123, Santiago" required>
+            <input
+              type="text"
+              id="direccion"
+              name="direccion"
+              class="form-control"
+              placeholder="Ej. Av. Matta 678, Santiago"
+              value="{{ direccion_prev|default:'' }}"
+            >
           </div>
 
           <!-- Método de pago -->
           <div class="mb-4">
             <label class="form-label fw-semibold" for="pago">💳 Método de Pago</label>
             <select id="pago" name="pago" class="form-select" required>
-              <option value="" disabled selected>Selecciona una opción</option>
-              <option value="tarjeta">Tarjeta (PayPal)</option>
-              <option value="transferencia">Transferencia Bancaria</option>
+              <option value="" disabled {% if not pago_prev %}selected{% endif %}>Selecciona una opción</option>
+              <option value="tarjeta" {% if pago_prev == 'tarjeta' %}selected{% endif %}>Tarjeta (PayPal)</option>
+              <option value="transferencia" {% if pago_prev == 'transferencia' %}selected{% endif %}>Transferencia Bancaria</option>
             </select>
           </div>
 
-          <!-- Botón de pago -->
-          <button type="submit" class="checkout-btn mt-3">
+          <button type="submit" class="checkout-btn mt-3" style="margin-top: 4%;">
             ✅ Pagar y Confirmar Pedido
           </button>
         </form>
@@ -119,31 +151,79 @@
     <div class="col-md-5">
       <div class="summary-box">
         <h5 class="mb-4" style="font-size: 1.6rem;">🛍 Resumen del Pedido</h5>
+        {% if carrito_items %}
+          {% for item in carrito_items %}
+            <div class="item d-flex justify-content-between">
+              <div>
+                <strong>{{ item.producto.nombre }}</strong><br>
+                <small>Cantidad: {{ item.cantidad }}</small>
+              </div>
+              <div>$ {{ item.subtotal|intcomma }}</div>
+            </div>
+          {% endfor %}
 
-        <!-- Productos -->
-        <div class="item d-flex justify-content-between">
-          <div>
-            <strong>Taladro Black+Decker</strong><br>
-            <small>Cantidad: 2</small>
+          <div class="d-flex justify-content-between mt-3">
+            <div>Subtotal:</div>
+            <div>$ <span id="subtotal">{{ total_clp|floatformat:0 }}</span></div>
           </div>
-          <div>$40.000</div>
-        </div>
 
-        <div class="item d-flex justify-content-between">
-          <div>
-            <strong>Martillo Stanley</strong><br>
-            <small>Cantidad: 1</small>
+          <div class="d-flex justify-content-between mt-1" id="despacho-extra" style="display: none;">
+            <div>Despacho:</div>
+            <div>$2.990</div>
           </div>
-          <div>$12.000</div>
-        </div>
 
-        <!-- Total -->
-        <div class="d-flex justify-content-between mt-4 summary-total">
-          <div>Total:</div>
-          <div>$52.000</div>
-        </div>
+          <div class="d-flex justify-content-between mt-3 summary-total">
+            <div>Total a pagar:</div>
+            <div>$ <span id="total-final">{{ total_clp|floatformat:0 }}</span></div>
+          </div>
+        {% else %}
+          <p>Tu carrito está vacío.</p>
+        {% endif %}
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  // Mostrar u ocultar el campo de dirección
+  function toggleDireccion(valor) {
+    const direccionBox = document.getElementById('direccion_box');
+    const direccionInput = document.getElementById('direccion');
+    if (valor === 'despacho') {
+      direccionBox.style.display = 'block';
+      direccionInput.required = true;
+    } else {
+      direccionBox.style.display = 'none';
+      direccionInput.required = false;
+    }
+  }
+
+  // Actualizar total según tipo de entrega
+  function actualizarTotal() {
+    const entregaSelect = document.getElementById('entrega');
+    const totalFinal    = document.getElementById('total-final');
+    const despachoExtra = document.getElementById('despacho-extra');
+    const subtotal      = parseInt(document.getElementById('subtotal').textContent.replace(/\./g, ''));
+
+    if (entregaSelect && entregaSelect.value === 'despacho') {
+      totalFinal.textContent = (subtotal + 2990).toLocaleString('es-CL');
+      despachoExtra.style.display = "flex";
+    } else {
+      totalFinal.textContent = subtotal.toLocaleString('es-CL');
+      despachoExtra.style.display = "none";
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const entregaSelect = document.getElementById('entrega');
+    if (entregaSelect) {
+      toggleDireccion(entregaSelect.value);
+      actualizarTotal();
+      entregaSelect.addEventListener('change', function () {
+        toggleDireccion(this.value);
+        actualizarTotal();
+      });
+    }
+  });
+</script>
 {% endblock %}

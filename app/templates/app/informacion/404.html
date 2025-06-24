@@ -1,0 +1,64 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .error-404 {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    background-color: #f8f9fa;
+    color: #212529;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 40px 20px;
+  }
+
+  .error-404 h1 {
+    font-size: 6rem;
+    font-weight: bold;
+    color: #dc3545;
+  }
+
+  .error-404 h2 {
+    font-size: 2rem;
+    margin-top: 10px;
+    color: #0d6efd;
+  }
+
+  .error-404 p {
+    font-size: 1.2rem;
+    margin: 15px 0 30px;
+  }
+
+  .error-404 a {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #0d6efd;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+
+  .error-404 a:hover {
+    background-color: #084298;
+  }
+
+  .error-404 img {
+    max-width: 300px;
+    margin-bottom: 25px;
+  }
+</style>
+
+<div class="error-404">
+  <img src="{% static 'app/img/error404.jpg' %}" alt="Página no encontrada">
+  <h1>404</h1>
+  <h2>Página no encontrada</h2>
+  <p>Lo sentimos, la página que estás buscando no existe o ha sido movida.</p>
+  <a href="{% url 'index' %}">Volver al inicio</a>
+</div>
+{% endblock %}

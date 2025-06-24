@@ -1,110 +1,218 @@
+
 {% extends 'app/base.html' %}
 {% load static %}
+{% load humanize %}
+
+{% block title %}Pago / Pedido – FERREMAS{% endblock %}
 
 {% block content %}
 <style>
-  .thank-you-section {
-    background-color: #f0f4f8;
-    padding: 80px 0;
-  }
-
-  .thank-you-box {
-    background: #fff;
-    padding: 50px 30px;
-    border-radius: 15px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
-    text-align: center;
-  }
-
-  .thank-you-icon {
-    font-size: 70px;
-    color: #28a745;
-    margin-bottom: 20px;
-  }
-
-  .thank-you-title {
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: #333;
-  }
-
-  .thank-you-message {
-    font-size: 18px;
-    margin-bottom: 25px;
-    color: #555;
-  }
-
-  .order-summary {
-    text-align: left;
-    margin-top: 30px;
-    font-size: 16px;
+  .confirmation-section {
     background-color: #f8f9fa;
-    padding: 20px;
+  }
+  .confirm-box {
+    background-color: #fff;
     border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
+    max-width: 800px;
+    margin: 30px auto;
+    font-size: 1.4rem;
+    line-height: 1.6;
   }
-
-  .order-summary h5 {
-    font-weight: bold;
-    margin-bottom: 15px;
+  .confirm-title {
+    color: #28a745;
+    font-size: 2.5rem;
+    font-weight: 700;
   }
-
+  .order-info {
+    margin-top: 20px;
+  }
+  .order-info dt {
+    font-weight: 600;
+  }
+  .order-info dd {
+    margin-bottom: 1rem;
+  }
+  .product-list {
+    margin-top: 30px;
+  }
+  .product-list .item {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 0;
+  }
+  .product-list .item:last-child {
+    border-bottom: none;
+  }
+  .total-line {
+    font-weight: 700;
+    font-size: 1.6rem;
+    margin-top: 20px;
+  }
+  .transfer-info {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 30px;
+  }
+  .transfer-info h5 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .transfer-info p {
+    margin-bottom: 0.5rem;
+  }
   .btn-home {
-    background-color: #007bff;
-    color: white;
-    font-size: 16px;
-    padding: 12px 30px;
+    margin-top: 30px;
+    padding: 12px 24px;
+    font-size: 1.3rem;
+    background: #28a745;
+    color: #fff;
+    border: none;
     border-radius: 8px;
     text-decoration: none;
-    transition: background-color 0.3s;
-    margin-top: 30px;
-    display: inline-block;
   }
-
   .btn-home:hover {
-    background-color: #0056b3;
-  }
-
-  .btn-pdf {
-    background-color: #6c757d;
-    color: white;
-    font-size: 14px;
-    padding: 10px 20px;
-    border-radius: 6px;
-    text-decoration: none;
-    margin-top: 15px;
-    display: inline-block;
-  }
-
-  .btn-pdf:hover {
-    background-color: #5a6268;
+    background: #218838;
   }
 </style>
 
-<div class="thank-you-section">
-  <div class="container">
-    <div class="thank-you-box mx-auto" style="max-width: 600px;">
-      <div class="thank-you-icon">✅</div>
-      <div class="thank-you-title">¡Gracias por tu compra!</div>
-      <div class="thank-you-message">
-        Tu pedido ha sido recibido con éxito. Te enviaremos un correo con los detalles.
+<div class="container confirmation-section py-5">
+  <div class="confirm-box" id="comprobante">
+    <!-- CABECERA: depende de tipo de pago -->
+    <div class="text-center mb-4">
+      {% if pedido.pago.tipo_pago.tipo_pago == 'tarjeta' %}
+        <h2 class="confirm-title">✅ ¡Pago Confirmado!</h2>
+        <p class="text-muted">Tu pago a través de PayPal ha sido procesado exitosamente.</p>
+      {% else %}
+        <h2 class="confirm-title">🔒 Pendiente de Transferencia</h2>
+        <p class="text-muted">Tu pedido está pendiente de pago vía Transferencia Bancaria.</p>
+      {% endif %}
+    </div>
+
+    <!-- DATOS DEL PEDIDO -->
+    <div class="mb-4 border p-4 rounded bg-light">
+      <h5 class="mb-3">🧾 Información del Pedido</h5>
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>N.º Pedido:</strong> #{{ pedido.id }}</p>
+          <p><strong>Fecha:</strong> {{ pedido.fecha_creacion|date:"d/m/Y H:i" }}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Método de Pago:</strong> {{ pedido.pago.tipo_pago.tipo_pago|capfirst }}</p>
+          <p><strong>Estado:</strong> {{ pedido.estado_pedido.desc_estado }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETALLES DE ENTREGA O RETIRO -->
+    <div class="mb-4 border p-4 rounded bg-white">
+      <h5 class="mb-3">📦 Entrega</h5>
+      {% if pedido.tipo_entrega == 'Despacho a domicilio' %}
+        <p><strong>Tipo:</strong> Despacho a domicilio</p>
+        <p><strong>Dirección:</strong> {{ pedido.direccion_envio }}</p>
+      {% else %}
+        <p><strong>Tipo:</strong> Retiro en tienda</p>
+        <p><strong>Dirección de tienda:</strong> San Diego #763, Santiago</p>
+      {% endif %}
+    </div>
+
+    <!-- LISTA DE PRODUCTOS -->
+    <div class="mb-4 border p-4 rounded bg-white">
+      <h5 class="mb-3">🛒 Detalles del Pedido</h5>
+      {% for item in detalle_items %}
+        <div class="d-flex justify-content-between border-bottom py-2">
+          <div><strong>{{ item.producto.nombre }}</strong> × {{ item.cantidad }}</div>
+          <div>$ {{ item.precio_unidad|intcomma }}</div>
+        </div>
+      {% endfor %}
+
+      {% if pedido.tipo_entrega == 'Despacho a domicilio' %}
+        <div class="d-flex justify-content-between py-2">
+          <div><strong>Despacho</strong></div>
+          <div>$ 2.990</div>
+        </div>
+      {% endif %}
+
+      <div class="d-flex justify-content-between py-2 border-top mt-3 total-line">
+        <div>Total a Pagar</div>
+        <div>$ {{ total_final|intcomma }}</div>
+      </div>
+    </div>
+
+    <!-- INSTRUCCIONES DE TRANSFERENCIA SI APLICA -->
+    {% if pedido.pago.tipo_pago.tipo_pago == 'transferencia' %}
+      <div class="transfer-info">
+        <h5>🏦 Datos para Transferencia</h5>
+        <p>Transfiere <strong>$ {{ total_final|intcomma }}</strong> a la siguiente cuenta:</p>
+        <ul>
+          <li><strong>Banco:</strong> Banco de Chile</li>
+          <li><strong>Tipo de cuenta:</strong> Cuenta Corriente</li>
+          <li><strong>N.º de cuenta:</strong> 1234-5678-90</li>
+          <li><strong>RUT:</strong> 76.543.210-9</li>
+          <li><strong>Nombre:</strong> Ferretería FERREMAS E.I.R.L.</li>
+        </ul>
+        <p>Una vez transferido, sube tu comprobante a continuación:</p>
       </div>
 
-      <!-- Resumen del pedido (simulado) -->
-      <div class="order-summary">
-        <h5>Resumen del Pedido</h5>
-        <p><strong>N° de Pedido:</strong> #123456</p>
-        <p><strong>Fecha:</strong> 14 de mayo de 2025</p>
-        <p><strong>Total:</strong> $20.000</p>
-        <p><strong>Método de Pago:</strong> Transferencia</p>
+      <!-- Formulario para subir comprobante -->
+      <div class="text-center mt-4">
+        <form action="{% url 'subir_comprobante' pedido.id %}"
+              method="POST"
+              enctype="multipart/form-data"
+              class="d-inline-block">
+          {% csrf_token %}
+          <input type="file"
+                 name="comprobante"
+                 id="inputComprobante"
+                 accept="image/*"
+                 style="display: none;"
+                 onchange="this.form.submit()">
+          <button type="button"
+                  class="btn-home"
+                  onclick="document.getElementById('inputComprobante').click();">
+            📤 Adjuntar Comprobante
+          </button>
+        </form>
       </div>
+    {% endif %}
 
-      <!-- Botón para descargar PDF (futuro) -->
-      <a href="#" class="btn-pdf">📄 Descargar Comprobante (PDF)</a><br>
+    <!-- BOTONES PARA VOLVER O DESCARGAR PDF -->
+    <div class="text-center mt-4">
+      <a href="{% url 'index' %}" class="btn-home">← Volver al Inicio</a>
+      {% if pedido.pago.tipo_pago.tipo_pago == 'tarjeta' %}
+        <button class="btn-home ms-3" onclick="descargarPDF()">📄 Descargar Comprobante</button>
+      {% endif %}
+    </div>
 
-      <!-- Botón volver al inicio -->
-      <a href="{% url 'index' %}" class="btn-home">🏠 Volver al Inicio</a>
+    <div id="mensaje-carga" style="display: none; margin-top: 15px; font-size: 1.2rem;">
+      <span class="spinner-border spinner-border-sm text-success me-2" role="status" aria-hidden="true"></span>
+      Generando comprobante PDF...
     </div>
   </div>
 </div>
+
+<!-- Script para generar PDF con html2pdf.js cuando es PayPal -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function descargarPDF() {
+  const mensaje   = document.getElementById('mensaje-carga');
+  const elemento  = document.getElementById('comprobante');
+
+  mensaje.style.display = 'block';
+
+  const opciones = {
+    margin:       0.5,
+    filename:     'comprobante_ferremas.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opciones).from(elemento).save().then(() => {
+    mensaje.style.display = 'none';
+  });
+}
+</script>
 {% endblock %}

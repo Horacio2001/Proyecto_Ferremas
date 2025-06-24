@@ -1,15 +1,18 @@
 {% extends 'app/base.html' %}
 {% load static %}
+{% load humanize %}
+
+{% block title %}Tu Carrito – FERREMAS{% endblock %}
 
 {% block content %}
 <style>
   body {
-    font-size: 1.5rem; /* Más grande para lectura cómoda */
+    font-size: 1.5rem; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
   h2 {
-    font-size: 2.8rem; /* Título*/
+    font-size: 2.8rem; /* Título */
     font-weight: 700;
   }
 
@@ -66,52 +69,99 @@
     }
   }
 </style>
-
-<div class="container py-5">
-  <h2 class="text-center mb-5">🛒 Tu Carrito de Compras</h2>
-
-  <!-- Mensaje carrito vacío (activar con lógica) -->
-  <!-- <div class="alert alert-info text-center" style="font-size:1.3rem;">Tu carrito está vacío.</div> -->
-
-  <div class="table-responsive">
-    <table class="table align-middle table-bordered table-hover">
-      <thead class="text-center">
-        <tr>
-          <th>Producto</th>
-          <th>Cantidad</th>
-          <th>Precio</th>
-          <th>Subtotal</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody class="text-center">
-        <!-- Producto ejemplo -->
-        <tr>
-          <td>
-            <div class="d-flex align-items-center">
-              <img src="{% static 'app/img/producto1.jpg' %}" alt="Producto" class="rounded me-3 product-img">
-              <span class="fw-semibold">Taladro Eléctrico XYZ</span>
-            </div>
-          </td>
-          <td>2</td>
-          <td>$100.000</td>
-          <td>$200.000</td>
-          <td>
-            <button class="btn btn-danger btn-sm">Eliminar</button>
-          </td>
-        </tr>
-        <!-- Más productos -->
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Total y botones -->
-  <div class="d-flex justify-content-between align-items-center mt-4 flex-column flex-md-row">
-    <h4 style="font-weight: 700;">Total a pagar: <strong class="text-success">$200.000</strong></h4>
-    <div class="d-flex gap-3 flex-column flex-sm-row">
-      <a href="#" class="btn btn-outline-secondary">← Seguir Comprando</a>
-      <a href="#" class="btn btn-success">Finalizar Compra</a>
+<nav id="navigation2">
+    <div class="container">
+        <div id="responsive-nav">
+            <ul class="main-nav nav navbar-nav">
+                <li>
+                    <a href="javascript:history.back()" class="back-arrow">
+                        <i class="fa fa-arrow-left"></i> Volver
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
+</nav>
+
+<div class="container py-5" style="margin-top: 3%; margin-bottom: 10%;">
+  <h2 class="text-center mb-5" style="font-size: 300%; margin-bottom: 4%;">🛒 Tu Carrito de Compras</h2>
+
+  {% if carrito_items %}
+    <div class="table-responsive">
+      <table class="table align-middle table-bordered table-hover">
+        <thead class="text-center">
+          <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Subtotal</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          {% for item in carrito_items %}
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  {# Si tu API devolviera 'imagen_url' en producto_data: #}
+                  {# <img src="{{ item.producto.imagen_url }}" class="product-img rounded me-3" alt="{{ item.producto.nombre }}"> #}
+                  {# Sino, placeholder: #}
+                  <img src="{% static 'app/img/placeholder_producto.png' %}"
+                       alt="Sin imagen"
+                       class="rounded me-3 product-img">
+                  <span class="fw-semibold">{{ item.producto.nombre }}</span>
+                </div>
+              </td>
+              <td>
+                <form method="post" action="{% url 'actualizar_cantidad' item.producto.id %}"
+                      class="d-flex justify-content-center align-items-center">
+                  {% csrf_token %}
+                  <input
+                    type="number"
+                    name="cantidad"
+                    value="{{ item.cantidad }}"
+                    min="1"
+                    max="{{ item.producto.stock }}"
+                    class="form-control form-control-sm text-center"
+                    style="width:80px;"
+                  >
+                  <button type="submit" class="btn btn-sm btn-outline-primary ms-2">
+                    <i class="fa fa-refresh"></i>
+                  </button>
+                </form>
+              </td>
+              <td>${{ item.precio_unidad|intcomma }}</td>
+              <td><strong>${{ item.subtotal|intcomma }}</strong></td>
+              <td>
+                <a href="{% url 'eliminar_del_carrito' item.producto.id %}"
+                   class="btn btn-danger btn-sm">
+                  <i class="fa fa-trash"></i> Eliminar
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Total y botones -->
+    <div class="d-flex justify-content-between align-items-center mt-4 flex-column flex-md-row">
+      <h4 style="font-weight: 700;">
+        Total a pagar: <strong class="text-success">${{ total|intcomma }}</strong>
+      </h4>
+      <div class="d-flex gap-3 flex-column flex-sm-row mt-3 mt-md-0">
+        <a href="{% url 'catalogo_cliente' %}" class="btn btn-outline-secondary">
+          ← Seguir Comprando
+        </a>
+        <a href="{% url 'checkout' %}" class="btn btn-success">
+          Finalizar Compra
+        </a>
+      </div>
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center" style="font-size:1.3rem;">
+      Tu carrito está vacío. <a href="{% url 'catalogo_cliente' %}">Ir al catálogo</a>
+    </div>
+  {% endif %}
 </div>
 {% endblock %}

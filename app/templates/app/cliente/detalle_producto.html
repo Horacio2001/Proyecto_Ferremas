@@ -1,82 +1,106 @@
 {% extends 'app/base.html' %}
 {% load static %}
+{% load humanize %}
+
+{% block title %}Detalle de {{ producto.nombre }} – FERREMAS{% endblock %}
 
 {% block content %}
-
 <style>
+  .product-image {
+    max-width: 100%;
+    width: 300px;
+    height: auto;
+  }
 
-.product-image {
-  max-width: 100%;
-  width: 300px; /* Ajusta esto según lo que necesites */
-  height: auto; /* Para mantener la proporción */
-}
+  .product-detail {
+    font-size: 1.4rem;
+    line-height: 1.5;
+  }
 
+  .product-title {
+    font-size: 2rem;
+    font-weight: bold;
+  }
 
-.product-detail {
-  font-size: 1.4rem;
-  line-height: 1.5;
-}
+  .product-info ul {
+    list-style: none;
+    padding-left: 0;
+  }
 
-.product-title {
-  font-size: 2rem;
-  font-weight: bold;
-}
+  .service-box {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    transition: box-shadow 0.3s;
+    background-color: #f9f9f9;
+    height: 100%;
+  }
 
-.product-info ul {
-  list-style: none;
-  padding-left: 0;
-}
+  .service-box:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
 
-.service-box {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 15px;
-  text-align: center;
-  transition: box-shadow 0.3s;
-  background-color: #f9f9f9;
-  height: 100%;
-}
+  .service-box img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+  }
 
-.service-box:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-.service-box img {
-  width: 50px;
-  height: 50px;
-  margin-bottom: 10px;
-}
-
-.btn-lg {
-  padding: 12px 24px;
-  font-size: 1.5rem;
-}
+  .btn-lg {
+    padding: 12px 24px;
+    font-size: 1.5rem;
+  }
 </style>
 
-<div class="container py-5 product-detail">
-  <div class="row mb-5">
-    <!-- Imagen del producto -->
+<div class="container py-5 product-detail" style="margin-bottom: 5%;">
+  <div class="row mb-5" style="margin-top: 10%; margin-bottom: 15%;">
+    <!-- Imagen dinámica -->
     <div class="col-md-6">
-      <img src="{% static 'app/img/sierra_circular.png' %}" alt="Sierra Circular Makita 5007NK" class="product-image img-fluid rounded shadow">
-
+      {% if producto.imagen %}
+        <img src="{{ producto.imagen.url }}" 
+             alt="{{ producto.nombre }}" 
+             class="product-image img-fluid rounded shadow">
+      {% else %}
+        <img src="{% static 'app/img/placeholder_producto.png' %}" 
+             alt="Sin imagen" 
+             class="product-image img-fluid rounded shadow">
+      {% endif %}
     </div>
 
-    <!-- Detalles del producto -->
+    <!-- Detalles dinámicos del producto -->
     <div class="col-md-6 product-info">
-      <h2 class="product-title mb-3">Sierra Circular Makita 5007NK 7 1/4" 1800W</h2>
-      <p class="mb-3">Potente sierra circular ideal para cortes precisos en madera y otros materiales.</p>
+      <h2 class="product-title mb-3">{{ producto.nombre }}</h2>
+      <p class="mb-3">{{ producto.descripcion }}</p>
+      
       <ul class="mb-4">
-        <li><strong>Potencia:</strong> 1800W</li>
-        <li><strong>Velocidad sin carga:</strong> 5800 RPM</li>
-        <li><strong>Diámetro del disco:</strong> 185mm (7 1/4")</li>
-        <li><strong>Corte a 90°:</strong> 63.5mm</li>
-        <li><strong>Peso:</strong> 5.2kg</li>
+        <li><strong>Precio:</strong> $ {{ producto.precio|intcomma }}</li>
+        <li><strong>Stock disponible:</strong> 
+          {% if producto.stock > 0 %}
+            <span class="text-success">{{ producto.stock }} unidades</span>
+          {% else %}
+            <span class="text-danger">Agotado</span>
+          {% endif %}
+        </li>
+        {% comment %}
+          Puedes agregar más atributos de producto si los tuvieras, 
+          como “marca”, “peso”, “dimensiones”, etc.
+        {% endcomment %}
       </ul>
-      <button class="btn btn-success btn-lg">Agregar al carrito</button>
+
+      {% if producto.stock > 0 %}
+        <!-- Enlace para agregar al carrito -->
+        <a href="{% url 'agregar_al_carrito' producto.id %}"
+           class="btn btn-success btn-lg mt-3" style="margin-top: 5%;">
+          Agregar al carrito
+        </a>
+      {% else %}
+        <button class="btn btn-secondary btn-lg mt-3" disabled>Sin stock</button>
+      {% endif %}
     </div>
   </div>
 
-  <!-- Servicios: despacho, retiro, garantía -->
+  <!-- Sección de servicios (estática) -->
   <div class="row text-center">
     <div class="col-md-4 mb-4">
       <div class="service-box">
@@ -101,5 +125,4 @@
     </div>
   </div>
 </div>
-
 {% endblock %}

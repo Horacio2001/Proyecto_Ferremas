@@ -47,78 +47,141 @@
   .table td, .table th {
     vertical-align: middle;
   }
+  
+  /* Nuevos estilos para los botones */
+  .btn-accion {
+    min-width: 100px;
+    margin: 0 3px;
+  }
+  
+  .btn-aprobar {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+  
+  .btn-rechazar {
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  .btn-aprobar:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+  }
+  
+  .btn-rechazar:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
 </style>
 
 <div class="container py-5">
-  <!-- Título principal -->
   <div class="text-center mb-5">
-    <h1 class="page-title"><i class="fas fa-clipboard-check me-2"></i> Aprobar Pedido</h1>
-    <p class="text-muted">Revisa y gestiona el pedido solicitado por el cliente</p>
+    <h1 class="page-title"><i class="fas fa-clipboard-list me-2"></i> Pedidos por Aprobar</h1>
+    <p class="text-muted">Revisa y gestiona los pedidos aprobados por contabilidad</p>
   </div>
 
-  <!-- Información del Pedido -->
-  <div class="card card-custom mb-4">
-    <div class="card-header card-header-custom">
-      <i class="fas fa-info-circle me-2"></i> Detalles del Pedido #12345
-    </div>
-    <div class="card-body">
-      <div class="row g-3">
-        <div class="col-md-4"><strong>Cliente:</strong> Juan Pérez</div>
-        <div class="col-md-4"><strong>Fecha:</strong> 14 de mayo de 2025</div>
-        <div class="col-md-4">
-          <strong>Estado:</strong>
-          <span class="badge-pendiente">Pendiente de aprobación</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Lista de productos -->
-  <div class="card card-custom mb-4">
-    <div class="card-header bg-light fw-bold">
-      <i class="fas fa-box me-2"></i> Productos del Pedido
-    </div>
+  {% if pedidos_data %}
     <div class="table-responsive">
-      <table class="table table-hover align-middle mb-0">
-        <thead>
+      <table class="table table-hover">
+        <thead class="table-light">
           <tr>
-            <th>Producto</th>
-            <th class="text-center">Cantidad</th>
-            <th class="text-end">Precio Unitario</th>
-            <th class="text-end">Total</th>
+            <th>ID Pedido</th>
+            <th>Cliente</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
+          {% for pedido in pedidos_data %}
           <tr>
-            <td>Martillo Profesional</td>
-            <td class="text-center">2</td>
-            <td class="text-end">$12.000</td>
-            <td class="text-end">$24.000</td>
+            <td>#{{ pedido.pedido.id }}</td>
+            <td>{{ pedido.cliente }}</td>
+            <td>{{ pedido.fecha }}</td>
+            <td>${{ pedido.total|floatformat:0 }}</td>
+            <td>
+              <div class="d-flex">
+                <form method="post" action="{% url 'gestionar_pedido_vendedor' pedido.pedido.id %}" style="display: inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="accion" value="aprobar">
+                  <button type="submit" class="btn btn-sm btn-success btn-accion btn-aprobar">
+                    <i class="fas fa-check me-1"></i> Aprobar
+                  </button>
+                </form>
+                <form method="post" action="{% url 'gestionar_pedido_vendedor' pedido.pedido.id %}" style="display: inline;">
+                  {% csrf_token %}
+                  <input type="hidden" name="accion" value="rechazar">
+                  <button type="submit" class="btn btn-sm btn-danger btn-accion btn-rechazar">
+                    <i class="fas fa-times me-1"></i> Rechazar
+                  </button>
+                </form>
+              </div>
+            </td>
           </tr>
-          <tr>
-            <td>Caja de Tornillos</td>
-            <td class="text-center">5</td>
-            <td class="text-end">$4.000</td>
-            <td class="text-end">$20.000</td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
-  </div>
+  {% else %}
+    <div class="card card-custom">
+      <div class="card-body text-center py-5">
+        <i class="fas fa-clipboard-check fa-3x text-muted mb-4"></i>
+        <h3>No hay pedidos pendientes</h3>
+        <p class="text-muted">Todos los pedidos aprobados por contabilidad han sido gestionados.</p>
+      </div>
+    </div>
+  {% endif %}
+</div>
 
-  <!-- Total -->
-  <div class="text-end mb-4">
-    <h4 class="fw-bold">Total del Pedido: <span class="text-success">$44.000</span></h4>
-  </div>
-
-  <!-- Botones de acción -->
-  <div class="text-center">
-    <button class="btn btn-success btn-lg-custom me-3">
-      <i class="fas fa-check-circle me-1"></i> Aprobar Pedido
-    </button>
-    <button class="btn btn-danger btn-lg-custom">
-      <i class="fas fa-times-circle me-1"></i> Rechazar Pedido
-    </button>
+<!-- Modal para motivo de rechazo -->
+<div class="modal fade" id="motivoRechazoModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Motivo de rechazo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="rechazoForm" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="accion" value="rechazar">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="motivo" class="form-label">Por favor indica el motivo del rechazo:</label>
+            <textarea class="form-control" id="motivo" name="motivo" rows="3" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Confirmar Rechazo</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
+
+<script>
+// Script para manejar el modal de rechazo
+document.addEventListener('DOMContentLoaded', function() {
+  // Configurar todos los botones de rechazo
+  document.querySelectorAll('.btn-rechazar').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const form = this.closest('form');
+      const modal = new bootstrap.Modal(document.getElementById('motivoRechazoModal'));
+      
+      // Configurar el formulario del modal
+      document.getElementById('rechazoForm').action = form.action;
+      
+      // Mostrar modal
+      modal.show();
+      
+      // Manejar envío del formulario del modal
+      document.getElementById('rechazoForm').onsubmit = function() {
+        form.submit();
+      };
+    });
+  });
+});
+</script>
 {% endblock %}
